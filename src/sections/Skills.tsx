@@ -1,7 +1,8 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import '../styles/globals.css';
 
-const Skills: React.FC = () => {
+const Skills = () => {
   const frontendSkills = [
     { name: 'HTML5', level: 90, status: 'Experienced' },
     { name: 'CSS3', level: 85, status: 'Experienced' },
@@ -18,28 +19,36 @@ const Skills: React.FC = () => {
     { name: 'Docker', level: 60, status: 'Basic' }
   ];
 
-  const SkillBar: React.FC<{ skill: { name: string; level: number; status: string } }> = ({ skill }) => (
-    <div style={{ 
-      padding: 'var(--spacing-md)',
-      backgroundColor: 'var(--primary-white)',
-      borderRadius: '8px',
-      border: '1px solid var(--border-grey)',
-      transition: 'transform 0.3s ease',
-      cursor: 'pointer'
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.transform = 'translateY(-2px)';
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.transform = 'translateY(0)';
-    }}>
+  const SkillBar = ({ skill, index }: { skill: { name: string; level: number; status: string }, index: number }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      whileHover={{ scale: 1.02, y: -5 }}
+      style={{ 
+        padding: 'var(--spacing-md)',
+        backgroundColor: 'var(--primary-white)',
+        borderRadius: '8px',
+        border: '1px solid var(--border-grey)',
+        transition: 'all 0.3s ease',
+        cursor: 'pointer'
+      }}
+    >
       <div style={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center',
         marginBottom: 'var(--spacing-sm)'
       }}>
-        <h4 style={{ marginBottom: '0' }}>{skill.name}</h4>
+        <h4 style={{ 
+          marginBottom: '0',
+          fontSize: '1.125rem',
+          fontWeight: 500,
+          color: 'var(--primary-black)'
+        }}>
+          {skill.name}
+        </h4>
         <span style={{ 
           color: 'var(--medium-grey)', 
           fontSize: '0.9rem',
@@ -55,35 +64,72 @@ const Skills: React.FC = () => {
         borderRadius: '4px',
         overflow: 'hidden'
       }}>
-        <div style={{ 
-          width: `${skill.level}%`, 
-          height: '100%', 
-          backgroundColor: 'var(--primary-black)',
-          borderRadius: '4px',
-          transition: 'width 0.8s ease'
-        }}></div>
+        <motion.div
+          initial={{ width: 0 }}
+          whileInView={{ width: `${skill.level}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 + index * 0.1 }}
+          style={{ 
+            height: '100%', 
+            backgroundColor: 'var(--primary-black)',
+            borderRadius: '4px'
+          }}
+        />
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
-    <section id="experience" className="section">
-      <div className="container">
-        <div className="section-header" style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
-          <div style={{ 
+    <section id="experience" className="section" style={{
+      backgroundColor: 'var(--light-grey)',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <div className="container" style={{ width: '100%', maxWidth: '1200px' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}
+        >
+          <motion.div style={{ 
             color: 'var(--medium-grey)', 
-            fontSize: '1rem',
-            fontWeight: '500',
-            marginBottom: 'var(--spacing-sm)'
+            fontSize: '0.875rem',
+            fontWeight: 400,
+            marginBottom: 'var(--spacing-sm)',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase'
           }}>
             Explore My
-          </div>
-          <h2 className="section-title">Skills & Experience</h2>
-        </div>
+          </motion.div>
+          <motion.h2 style={{
+            fontSize: 'clamp(2rem, 5vw, 4rem)',
+            fontWeight: 400,
+            color: 'var(--primary-black)',
+            margin: 0,
+            letterSpacing: '-0.02em'
+          }}>
+            Skills & Experience
+          </motion.h2>
+        </motion.div>
         
         {/* Frontend Skills */}
-        <div className="mb-xl">
-          <h3 className="text-center mb-lg" style={{ 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{ marginBottom: 'var(--spacing-xl)' }}
+        >
+          <h3 style={{ 
+            fontSize: 'clamp(1.25rem, 3vw, 1.75rem)',
+            fontWeight: 400,
+            textAlign: 'center',
+            marginBottom: 'var(--spacing-lg)',
+            color: 'var(--primary-black)',
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
@@ -98,14 +144,24 @@ const Skills: React.FC = () => {
             gap: 'var(--spacing-md)'
           }}>
             {frontendSkills.map((skill, index) => (
-              <SkillBar key={index} skill={skill} />
+              <SkillBar key={index} skill={skill} index={index} />
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Backend Skills */}
-        <div>
-          <h3 className="text-center mb-lg" style={{ 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <h3 style={{ 
+            fontSize: 'clamp(1.25rem, 3vw, 1.75rem)',
+            fontWeight: 400,
+            textAlign: 'center',
+            marginBottom: 'var(--spacing-lg)',
+            color: 'var(--primary-black)',
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
@@ -120,13 +176,13 @@ const Skills: React.FC = () => {
             gap: 'var(--spacing-md)'
           }}>
             {backendSkills.map((skill, index) => (
-              <SkillBar key={index} skill={skill} />
+              <SkillBar key={index} skill={skill} index={index + frontendSkills.length} />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
-export default Skills; 
+export default Skills;

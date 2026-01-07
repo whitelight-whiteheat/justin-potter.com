@@ -11,10 +11,10 @@
   --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
   
   --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 2rem;
-  --spacing-lg: 4rem;
-  --spacing-xl: 8rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 3rem;
+  --spacing-xl: 6rem;
   
   --container-max-width: 1200px;
   --section-padding: 6rem 0;
@@ -28,9 +28,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow: hidden;
+  height: 100%;
 }
 
 body {
+  overflow: hidden;
+  height: 100%;
   font-family: var(--font-primary);
   line-height: 1.6;
   color: var(--primary-black);
@@ -38,6 +42,18 @@ body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.App {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
 }
 
 /* Typography */
@@ -84,7 +100,13 @@ p {
 }
 
 .section {
-  padding: var(--section-padding);
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
 }
 
 .section-title {

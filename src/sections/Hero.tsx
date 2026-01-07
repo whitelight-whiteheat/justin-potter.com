@@ -1,134 +1,198 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import '../styles/globals.css';
-import profilePic from '../assets/profile-pic.png';
 
-const Hero: React.FC = () => {
+const Hero = () => {
+  // Split text animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const textVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 50,
+      clipPath: 'inset(100% 0 0 0)'
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      clipPath: 'inset(0% 0 0 0)',
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
+      }
+    }
+  };
+
+  const subtitleVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        delay: 1.2,
+        duration: 0.6
+      }
+    }
+  };
+
   return (
-    <section className="section" style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center',
-      background: 'linear-gradient(135deg, var(--light-grey) 0%, var(--primary-white) 100%)'
-    }}>
-      <div className="container">
-        <div className="hero-grid" style={{ 
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 'var(--spacing-xl)',
-          alignItems: 'center'
-        }}>
-          {/* Left side - Text content */}
-          <div className="hero-text text-left">
-            <div className="mb-md" style={{ 
-              color: 'var(--medium-grey)', 
-              fontSize: '1.25rem',
-              fontWeight: '400'
-            }}>
-              Hello, I'm
-            </div>
-            <h1 className="mb-md">
-              Justin Potter
-            </h1>
-            <h2 className="mb-lg" style={{ 
-              color: 'var(--medium-grey)', 
-              fontWeight: '400',
-              fontSize: '1.5rem'
-            }}>
-              Fullstack Developer
-            </h2>
-            <p className="mb-lg" style={{ 
-              fontSize: '1.25rem',
-              lineHeight: '1.8'
-            }}>
-              Crafting seamless digital experiences with modern technologies. 
-              Based in Brooklyn, NY, I specialize in building user-focused web applications 
-              that combine elegant design with robust functionality.
-            </p>
-            <div className="mb-lg">
-              <a href="#contact" className="btn" style={{ marginRight: 'var(--spacing-md)' }}>
-                Get In Touch
-              </a>
-              <a href="#projects" className="btn btn-outline">
-                View My Work
-              </a>
-            </div>
-            <div className="hero-socials" style={{ 
-              display: 'flex', 
-              gap: 'var(--spacing-md)',
-              flexWrap: 'wrap'
-            }}>
-              <a href="https://www.linkedin.com/in/justin-mpotter/" target="_blank" rel="noopener noreferrer" style={{ 
-                color: 'var(--medium-grey)', 
-                fontSize: '1.5rem',
-                transition: 'color 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--primary-black)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--medium-grey)';
-              }}>
-                💼
-              </a>
-              <a href="https://github.com/whitelight-whiteheat" target="_blank" rel="noopener noreferrer" style={{ 
-                color: 'var(--medium-grey)', 
-                fontSize: '1.5rem',
-                transition: 'color 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--primary-black)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--medium-grey)';
-              }}>
-                📱
-              </a>
-              <a href="mailto:Bjmpotter@gmail.com" style={{ 
-                color: 'var(--medium-grey)', 
-                fontSize: '1.5rem',
-                transition: 'color 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--primary-black)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--medium-grey)';
-              }}>
-                📧
-              </a>
-            </div>
-          </div>
+    <motion.section 
+      className="hero-section"
+      style={{
+        height: 'auto',
+        minHeight: 'auto',
+        padding: 'calc(var(--spacing-lg) + 80px) 0 var(--spacing-md) 0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundColor: 'var(--primary-white)'
+      }}
+    >
+      {/* Main Content */}
+      <motion.div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          width: '100%',
+          maxWidth: '1400px',
+          padding: '0 var(--spacing-md)'
+        }}
+      >
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '0'
+          }}
+        >
+          {/* First Name - "JUSTIN" */}
+          <motion.h1
+            variants={textVariants}
+            style={{
+              fontSize: 'clamp(4rem, 14vw, 11rem)',
+              fontWeight: 700,
+              lineHeight: 0.85,
+              letterSpacing: '-0.03em',
+              color: 'var(--primary-black)',
+              margin: 0,
+              fontFamily: 'var(--font-primary)',
+              textTransform: 'uppercase'
+            }}
+          >
+            JUSTIN
+          </motion.h1>
 
-          {/* Right side - Profile image */}
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <div className="hero-profile-image" style={{
-              position: 'relative',
-              borderRadius: '50%',
-              overflow: 'hidden',
-              width: '400px',
-              height: '400px',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-              border: '4px solid var(--primary-white)'
-            }}>
-              <img 
-                src={profilePic} 
-                alt="Justin Potter" 
+          {/* Last Name - "POTTER" */}
+          <motion.h1
+            variants={textVariants}
+            style={{
+              fontSize: 'clamp(4rem, 14vw, 11rem)',
+              fontWeight: 700,
+              lineHeight: 0.85,
+              letterSpacing: '-0.03em',
+              color: 'var(--primary-black)',
+              margin: 0,
+              fontFamily: 'var(--font-primary)',
+              textTransform: 'uppercase',
+              marginTop: '-0.1em'
+            }}
+          >
+            POTTER
+          </motion.h1>
+
+          {/* Subtitle Section */}
+          <motion.div
+            variants={subtitleVariants}
+            initial="hidden"
+            animate="visible"
+            style={{
+              marginTop: 'var(--spacing-md)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}
+          >
+            <motion.p
+              style={{
+                fontSize: 'clamp(1.125rem, 1.8vw, 1.75rem)',
+                fontWeight: 400,
+                color: 'var(--medium-grey)',
+                margin: 0,
+                letterSpacing: '0.01em'
+              }}
+            >
+              Fullstack Developer
+            </motion.p>
+            
+            <motion.div
+              style={{
+                display: 'flex',
+                gap: 'var(--spacing-sm)',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                marginTop: '0.25rem'
+              }}
+            >
+              <motion.span
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
+                  fontSize: 'clamp(1rem, 1.3vw, 1.25rem)',
+                  color: 'var(--medium-grey)',
+                  fontWeight: 300
                 }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+              >
+                Brooklyn, NY
+              </motion.span>
+              
+              <motion.span
+                style={{
+                  fontSize: '1rem',
+                  color: 'var(--border-grey)',
+                  margin: '0 0.25rem'
+                }}
+              >
+                •
+              </motion.span>
+
+              <motion.a
+                href="#contact"
+                whileHover={{ 
+                  color: 'var(--primary-black)',
+                  x: 5
+                }}
+                style={{
+                  fontSize: 'clamp(1rem, 1.3vw, 1.25rem)',
+                  color: 'var(--medium-grey)',
+                  fontWeight: 300,
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <span style={{ opacity: 0.3 }}>[</span>
+                Contact
+                <span style={{ opacity: 0.3 }}>]</span>
+              </motion.a>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </motion.section>
   );
 };
 
-export default Hero; 
+export default Hero;

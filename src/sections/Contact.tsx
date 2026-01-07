@@ -1,10 +1,11 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import '../styles/globals.css';
 import emailIcon from '../assets/email.png';
 import linkedinIcon from '../assets/linkedin.png';
 import githubIcon from '../assets/github.png';
 
-const Contact: React.FC = () => {
+const Contact = () => {
   const contactInfo = {
     email: 'Bjmpotter@gmail.com',
     location: 'Brooklyn, NY',
@@ -30,43 +31,87 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <section id="contact" className="section">
-      <div className="container">
-        <div className="section-header" style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
-          <div style={{ 
+    <section id="contact" className="section" style={{
+      backgroundColor: 'var(--light-grey)',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'auto'
+    }}>
+      <div className="container" style={{ width: '100%', maxWidth: '1200px' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}
+        >
+          <motion.div style={{ 
             color: 'var(--medium-grey)', 
-            fontSize: '1rem',
-            fontWeight: '500',
-            marginBottom: 'var(--spacing-sm)'
+            fontSize: '0.875rem',
+            fontWeight: 400,
+            marginBottom: 'var(--spacing-sm)',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase'
           }}>
             Get in Touch
-          </div>
-          <h2 className="section-title">Let's Work Together</h2>
-        </div>
+          </motion.div>
+          <motion.h2 style={{
+            fontSize: 'clamp(2rem, 5vw, 4rem)',
+            fontWeight: 400,
+            color: 'var(--primary-black)',
+            margin: 0,
+            letterSpacing: '-0.02em'
+          }}>
+            Let's Work Together
+          </motion.h2>
+        </motion.div>
         
         <div style={{ 
           maxWidth: '800px', 
           margin: '0 auto',
           textAlign: 'center'
         }}>
-          <p className="mb-lg" style={{ fontSize: '1.25rem' }}>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ 
+              fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+              lineHeight: 1.8,
+              color: 'var(--medium-grey)',
+              marginBottom: 'var(--spacing-xl)'
+            }}
+          >
             I'm always interested in new opportunities and exciting projects. 
             Whether you have a question or just want to say hi, feel free to reach out!
-          </p>
+          </motion.p>
           
           {/* Contact Information */}
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: 'var(--spacing-md)',
-            marginBottom: 'var(--spacing-xl)'
-          }}>
-            <div style={{ 
-              padding: 'var(--spacing-md)',
-              backgroundColor: 'var(--light-grey)',
-              borderRadius: '8px',
-              border: '1px solid var(--border-grey)'
-            }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: 'var(--spacing-md)',
+              marginBottom: 'var(--spacing-xl)'
+            }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              style={{ 
+                padding: 'var(--spacing-md)',
+                backgroundColor: 'var(--primary-white)',
+                borderRadius: '8px',
+                border: '1px solid var(--border-grey)',
+                transition: 'all 0.3s ease'
+              }}
+            >
               <div style={{ 
                 width: '60px',
                 height: '60px',
@@ -85,21 +130,40 @@ const Contact: React.FC = () => {
                   }}
                 />
               </div>
-              <h4 className="mb-sm">Email</h4>
+              <h4 style={{ 
+                fontSize: '1.125rem',
+                fontWeight: 500,
+                marginBottom: 'var(--spacing-sm)',
+                color: 'var(--primary-black)'
+              }}>
+                Email
+              </h4>
               <a href={`mailto:${contactInfo.email}`} style={{ 
                 color: 'var(--medium-grey)',
-                fontSize: '1rem'
+                fontSize: '1rem',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--primary-black)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--medium-grey)';
               }}>
                 {contactInfo.email}
               </a>
-            </div>
+            </motion.div>
             
-            <div style={{ 
-              padding: 'var(--spacing-md)',
-              backgroundColor: 'var(--light-grey)',
-              borderRadius: '8px',
-              border: '1px solid var(--border-grey)'
-            }}>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              style={{ 
+                padding: 'var(--spacing-md)',
+                backgroundColor: 'var(--primary-white)',
+                borderRadius: '8px',
+                border: '1px solid var(--border-grey)',
+                transition: 'all 0.3s ease'
+              }}
+            >
               <div style={{ 
                 fontSize: '2rem', 
                 marginBottom: 'var(--spacing-sm)',
@@ -107,7 +171,14 @@ const Contact: React.FC = () => {
               }}>
                 📍
               </div>
-              <h4 className="mb-sm">Location</h4>
+              <h4 style={{ 
+                fontSize: '1.125rem',
+                fontWeight: 500,
+                marginBottom: 'var(--spacing-sm)',
+                color: 'var(--primary-black)'
+              }}>
+                Location
+              </h4>
               <p style={{ 
                 color: 'var(--medium-grey)',
                 fontSize: '1rem',
@@ -115,14 +186,18 @@ const Contact: React.FC = () => {
               }}>
                 {contactInfo.location}
               </p>
-            </div>
+            </motion.div>
             
-            <div style={{ 
-              padding: 'var(--spacing-md)',
-              backgroundColor: 'var(--light-grey)',
-              borderRadius: '8px',
-              border: '1px solid var(--border-grey)'
-            }}>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              style={{ 
+                padding: 'var(--spacing-md)',
+                backgroundColor: 'var(--primary-white)',
+                borderRadius: '8px',
+                border: '1px solid var(--border-grey)',
+                transition: 'all 0.3s ease'
+              }}
+            >
               <div style={{ 
                 fontSize: '2rem', 
                 marginBottom: 'var(--spacing-sm)',
@@ -130,7 +205,14 @@ const Contact: React.FC = () => {
               }}>
                 ✅
               </div>
-              <h4 className="mb-sm">Status</h4>
+              <h4 style={{ 
+                fontSize: '1.125rem',
+                fontWeight: 500,
+                marginBottom: 'var(--spacing-sm)',
+                color: 'var(--primary-black)'
+              }}>
+                Status
+              </h4>
               <p style={{ 
                 color: 'var(--medium-grey)',
                 fontSize: '1rem',
@@ -138,12 +220,24 @@ const Contact: React.FC = () => {
               }}>
                 {contactInfo.availability}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Social Links */}
-          <div className="mb-lg">
-            <h3 className="mb-md">Connect With Me</h3>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <h3 style={{
+              fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+              fontWeight: 400,
+              marginBottom: 'var(--spacing-md)',
+              color: 'var(--primary-black)'
+            }}>
+              Connect With Me
+            </h3>
             <div style={{ 
               display: 'flex', 
               justifyContent: 'center', 
@@ -151,31 +245,25 @@ const Contact: React.FC = () => {
               flexWrap: 'wrap'
             }}>
               {socialLinks.map((social, index) => (
-                <a 
+                <motion.a
                   key={index}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  whileHover={{ scale: 1.1, y: -5 }}
+                  whileTap={{ scale: 0.95 }}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: 'var(--spacing-md)',
-                    backgroundColor: 'var(--light-grey)',
+                    backgroundColor: 'var(--primary-white)',
                     borderRadius: '8px',
                     border: '1px solid var(--border-grey)',
                     textDecoration: 'none',
                     color: 'var(--primary-black)',
                     transition: 'all 0.3s ease',
                     minWidth: '120px'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.backgroundColor = 'var(--primary-white)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.backgroundColor = 'var(--light-grey)';
                   }}
                 >
                   <div style={{ 
@@ -202,25 +290,14 @@ const Contact: React.FC = () => {
                   }}>
                     {social.name}
                   </span>
-                </a>
+                </motion.a>
               ))}
             </div>
-          </div>
-
-          {/* Call to Action */}
-          <div>
-            <h3 className="mb-md">Ready to start a project?</h3>
-            <p className="mb-lg" style={{ fontSize: '1.1rem' }}>
-              I'm always interested in new opportunities and exciting projects. Let's discuss how we can work together!
-            </p>
-            <a href={`mailto:${contactInfo.email}`} className="btn">
-              Send Message
-            </a>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
   );
 };
 
-export default Contact; 
+export default Contact;
