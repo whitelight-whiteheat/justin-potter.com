@@ -123,7 +123,7 @@ const Hero = ({ hoveredProject }: HeroProps) => {
         padding: 'calc(var(--spacing-lg) + 50px) 0 0 0',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: 'var(--primary-black)'
@@ -135,8 +135,8 @@ const Hero = ({ hoveredProject }: HeroProps) => {
           position: 'relative',
           zIndex: 1,
           width: '100%',
-          maxWidth: '1400px',
-          padding: '0 var(--spacing-md)'
+          margin: '0',
+          padding: '0 0.5rem 0 0'
         }}
       >
         <motion.div

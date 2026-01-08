@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface HeaderProps {
-  onNavigate?: (view: 'main' | 'about' | 'contact') => void;
+  onNavigate?: (view: 'main' | 'about' | 'contact' | 'archive') => void;
+  activeView?: 'main' | 'about' | 'contact' | 'archive';
 }
 
-const Header = ({ onNavigate }: HeaderProps) => {
+const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Prevent body scroll when menu is open
@@ -23,7 +24,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
   const navItems = [
     { name: 'Work', view: 'main' as const, label: 'Projects' },
     { name: 'Info', view: 'about' as const, label: 'About' },
-    { name: 'Archive', view: 'main' as const, label: 'Archive' }
+    { name: 'Archive', view: 'archive' as const, label: 'Archive' }
   ];
 
   const menuVariants = {
@@ -63,7 +64,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
     }
   };
 
-  const handleNavClick = (view: 'main' | 'about' | 'contact') => {
+  const handleNavClick = (view: 'main' | 'about' | 'contact' | 'archive') => {
     setIsMenuOpen(false);
     if (onNavigate) {
       onNavigate(view);
@@ -87,15 +88,16 @@ const Header = ({ onNavigate }: HeaderProps) => {
           transition: 'all 0.3s ease'
         }}
       >
-        <div style={{ width: '100%', padding: '0' }}>
+        <div style={{ width: '100%', margin: '0', padding: '0' }}>
           <nav style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingTop: '0',
             paddingBottom: 'var(--spacing-md)',
-            paddingRight: 'var(--spacing-md)',
-            paddingLeft: '0'
+            paddingRight: '15rem',
+            paddingLeft: '0',
+            width: '100%'
           }}>
             {/* Logo/Home Link */}
             <motion.a
@@ -116,7 +118,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
                 textDecoration: 'none',
                 letterSpacing: '0.05em',
                 cursor: 'pointer',
-                paddingLeft: '0.50rem',
+                paddingLeft: '1rem',
                 marginLeft: '0',
                 marginTop: '0.50rem',
               }}
@@ -152,7 +154,19 @@ const Header = ({ onNavigate }: HeaderProps) => {
                     cursor: 'pointer'
                   }}
                 >
-                  <span className="bracket">[</span>{item.name}<span className="bracket">]</span>
+                  <span 
+                    className="bracket" 
+                    style={activeView === item.view ? { color: 'var(--lime-green)' } : {}}
+                  >
+                    [
+                  </span>
+                  {item.name}
+                  <span 
+                    className="bracket" 
+                    style={activeView === item.view ? { color: 'var(--lime-green)' } : {}}
+                  >
+                    ]
+                  </span>
                 </motion.a>
               ))}
             </div>

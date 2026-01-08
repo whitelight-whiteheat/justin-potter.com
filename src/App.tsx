@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './styles/globals.css';
 import Header from './components/Header';
-import Hero from './sections/Hero';
+import MainContent from './sections/MainContent';
 import About from './sections/About';
-import Projects from './sections/Projects';
 import Contact from './sections/Contact';
+import Archive from './sections/Archive';
 import Footer from './components/Footer';
 import { ProjectData } from './types';
 
@@ -17,7 +17,7 @@ const mainContainerStyle: React.CSSProperties = {
 };
 
 function App() {
-  const [activeView, setActiveView] = useState<'main' | 'about' | 'contact'>('main');
+  const [activeView, setActiveView] = useState<'main' | 'about' | 'contact' | 'archive'>('main');
   const [hoveredProject, setHoveredProject] = useState<ProjectData | null>(null);
 
   // #region agent log
@@ -35,21 +35,11 @@ function App() {
       display: 'flex',
       flexDirection: 'column'
     }}>
-      <Header onNavigate={setActiveView} />
-      {/* Main View - Hero + Projects */}
+      <Header onNavigate={setActiveView} activeView={activeView} />
+      {/* Main View - Merged Hero + Projects */}
       {activeView === 'main' && (
-        <main style={{
-          ...mainContainerStyle,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between'
-        }}>
-          <div style={{ flexShrink: 0 }}>
-            <Hero hoveredProject={hoveredProject} />
-          </div>
-          <div style={{ flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'flex-end' }}>
-            <Projects onProjectHover={setHoveredProject} />
-          </div>
+        <main style={mainContainerStyle}>
+          <MainContent onProjectHover={setHoveredProject} />
         </main>
       )}
 
@@ -64,6 +54,13 @@ function App() {
       {activeView === 'contact' && (
         <main style={mainContainerStyle}>
           <Contact />
+        </main>
+      )}
+
+      {/* Archive View */}
+      {activeView === 'archive' && (
+        <main style={mainContainerStyle}>
+          <Archive />
         </main>
       )}
 
