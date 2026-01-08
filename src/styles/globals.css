@@ -60,6 +60,48 @@ body {
   position: relative;
 }
 
+/* Crosshatch texture pattern */
+.background-texture {
+  position: relative;
+  background-color: var(--primary-black);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(255, 255, 255, 0.05) 1px,
+      rgba(255, 255, 255, 0.05) 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 1px,
+      rgba(255, 255, 255, 0.05) 1px,
+      rgba(255, 255, 255, 0.05) 2px
+    );
+  background-size: 20px 20px;
+}
+
+/* Dotted line pattern */
+.background-dots {
+  position: relative;
+  background-color: var(--primary-black);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
+/* Grid pattern - similar to reference site */
+.background-grid {
+  position: relative;
+  background-color: var(--primary-black);
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: 0 0;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;

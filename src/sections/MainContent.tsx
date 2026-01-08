@@ -136,13 +136,13 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
 
   return (
     <motion.section 
+      className="background-grid"
       style={{
         width: '100%',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        backgroundColor: 'var(--primary-black)',
         position: 'relative',
         overflow: 'hidden',
         padding: 'calc(var(--spacing-lg) + 50px) 0 var(--spacing-sm) 0'
@@ -156,7 +156,9 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          margin: '0'
+          margin: '0',
+          position: 'relative',
+          zIndex: 1
         }}
       >
         {/* Hero Section - Independent Container */}
@@ -228,153 +230,174 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             )}
           </div>
 
-          {/* Right Side Container - Parent for independent positioning */}
-          <div
+          {/* Designer & Developer - Independent positioning */}
+          <motion.div
+            variants={subtitleVariants}
+            initial="hidden"
+            animate="visible"
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              alignSelf: 'flex-start',
               position: 'absolute',
               top: 0,
-              right: '-0.0001rem',
-              gap: 'var(--spacing-xl)',
-              width: 'auto'
+              right: '10rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: 0,
+              textAlign: 'left',
+              maxWidth: '6rem',
+              overflow: 'visible',
+              transform: 'translateX(calc(-1 * (var(--spacing-xl) * 2 + 3rem)))',
+              minHeight: '2.4rem',
+              marginRight: '10.5rem'
             }}
           >
-            {/* Designer & Developer - Aligned with [work] */}
-            <motion.div
-              variants={subtitleVariants}
-              initial="hidden"
-              animate="visible"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: 0,
-                textAlign: 'left',
-                maxWidth: '6rem',
-                overflow: 'visible',
-                transform: 'translateX(calc(-1 * (var(--spacing-xl) * 2 + 3rem)))'
-              }}
-            >
               {hoveredProject ? (
-                <>
-                  <motion.div
+                <motion.div
+                  key="project-text"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    gap: 0,
+                    width: '100%'
+                  }}
+                >
+                  <p
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      gap: 0
+                      fontSize: '0.875rem',
+                      fontWeight: 400,
+                      color: 'var(--primary-white)',
+                      margin: 0,
+                      letterSpacing: '0.1em',
+                      fontFamily: 'var(--font-mono)',
+                      textTransform: 'uppercase',
+                      lineHeight: 1.2
                     }}
                   >
-                    <motion.p
-                      key="design"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 400,
-                        color: 'var(--primary-white)',
-                        margin: 0,
-                        letterSpacing: '0.1em',
-                        fontFamily: 'var(--font-mono)',
-                        textTransform: 'uppercase',
-                        lineHeight: 1.2
-                      }}
-                    >
-                      Design
-                    </motion.p>
-                    <motion.p
-                      key="development"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.05 }}
-                      style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 400,
-                        color: 'var(--primary-white)',
-                        margin: 0,
-                        letterSpacing: '0.1em',
-                        fontFamily: 'var(--font-mono)',
-                        textTransform: 'uppercase',
-                        lineHeight: 1.2
-                      }}
-                    >
-                      Development
-                    </motion.p>
-                  </motion.div>
-                </>
+                    Design
+                  </p>
+                  <p
+                    style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 400,
+                      color: 'var(--primary-white)',
+                      margin: 0,
+                      letterSpacing: '0.1em',
+                      fontFamily: 'var(--font-mono)',
+                      textTransform: 'uppercase',
+                      lineHeight: 1.2
+                    }}
+                  >
+                    Development
+                  </p>
+                </motion.div>
               ) : (
-                <>
-                  <motion.div
+                <motion.div
+                  key="default-text"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    gap: 0,
+                    width: '100%'
+                  }}
+                >
+                  <p
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
-                      gap: 0
+                      fontSize: '0.875rem',
+                      fontWeight: 400,
+                      color: 'var(--primary-white)',
+                      margin: 0,
+                      letterSpacing: '0.1em',
+                      fontFamily: 'var(--font-mono)',
+                      textTransform: 'uppercase',
+                      lineHeight: 1.2
                     }}
                   >
-                    <motion.p
-                      key="designer"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                      style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 400,
-                        color: 'var(--primary-white)',
-                        margin: 0,
-                        letterSpacing: '0.1em',
-                        fontFamily: 'var(--font-mono)',
-                        textTransform: 'uppercase',
-                        lineHeight: 1.2
-                      }}
-                    >
-                      Designer &
-                    </motion.p>
-                    <motion.p
-                      key="developer"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: 0.05 }}
-                      style={{
-                        fontSize: '0.875rem',
-                        fontWeight: 400,
-                        color: 'var(--primary-white)',
-                        margin: 0,
-                        letterSpacing: '0.1em',
-                        fontFamily: 'var(--font-mono)',
-                        textTransform: 'uppercase',
-                        lineHeight: 1.2
-                      }}
-                    >
-                      Developer
-                    </motion.p>
-                  </motion.div>
-                </>
+                    Designer &
+                  </p>
+                  <p
+                    style={{
+                      fontSize: '0.875rem',
+                      fontWeight: 400,
+                      color: 'var(--primary-white)',
+                      margin: 0,
+                      letterSpacing: '0.1em',
+                      fontFamily: 'var(--font-mono)',
+                      textTransform: 'uppercase',
+                      lineHeight: 1.2,
+                      marginRight: '4.5rem',
+                      marginLeft: '0rem',
+                    }}
+                  >
+                    Developer
+                  </p>
+                </motion.div>
               )}
-            </motion.div>
+          </motion.div>
 
-            {/* Brooklyn, NY - Aligned with [archive] */}
-            <div
-              style={{
-                fontSize: '0.875rem',
-                fontWeight: 400,
-                color: 'var(--primary-white)',
-                fontFamily: 'var(--font-mono)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                margin: 0,
-                textAlign: 'left',
-                maxWidth: '8rem',
-                overflow: 'visible',
-                whiteSpace: 'normal'
-              }}
-            >
-              {hoveredProject ? displayTime : `Brooklyn, NY ${displayTime}`}
-            </div>
+          {/* Brooklyn, NY - Independent positioning */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: '10rem',
+              fontSize: '0.875rem',
+              fontWeight: 400,
+              color: 'var(--primary-white)',
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              margin: 0,
+              textAlign: 'left',
+              maxWidth: '8rem',
+              overflow: 'visible',
+              whiteSpace: 'normal',
+              minHeight: '1.05rem',
+              marginRight: '-9rem'
+            }}
+          >
+            {hoveredProject ? (
+              <motion.span
+                key="year"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0
+                }}
+              >
+                {displayTime}
+              </motion.span>
+            ) : (
+              <motion.span
+                key="location"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0
+                }}
+              >
+                Brooklyn, NY {displayTime}
+              </motion.span>
+            )}
           </div>
         </motion.div>
         </div>
