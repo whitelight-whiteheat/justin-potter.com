@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import project1Image from '../assets/landingpage.png';
 import { ProjectData } from '../types';
+import { slideInRightVariants, projectCardHover, hoverTransition, DURATION, EASING } from '../utils/animations';
 
 interface ProjectsProps {
   onProjectHover?: (project: ProjectData | null) => void;
@@ -100,34 +101,21 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial="hidden"
+                whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                variants={slideInRightVariants}
+                transition={{ delay: index * 0.1 }}
                 data-project-id={project.id}
                 className="bracket-hover"
                 onMouseEnter={(e) => {
-                  // #region agent log
-                  console.log('Projects onMouseEnter fired', project.title);
-                  fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Projects.tsx:109',message:'onMouseEnter triggered',data:{projectId:project.id,projectTitle:project.title,hasCallback:!!onProjectHover},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
-                  // #endregion
                   setHoveredCardId(project.id);
                   const projectData = { title: project.title, year: project.year };
-                  // #region agent log
-                  fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Projects.tsx:115',message:'Calling onProjectHover with project data',data:{projectData},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
-                  // #endregion
-                  console.log('Calling onProjectHover with:', projectData);
                   if (onProjectHover) {
                     onProjectHover(projectData);
-                  } else {
-                    console.error('onProjectHover is undefined!');
                   }
                 }}
                 onMouseLeave={(e) => {
-                  // #region agent log
-                  console.log('Projects onMouseLeave fired');
-                  fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Projects.tsx:125',message:'onMouseLeave triggered',data:{projectId:project.id},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
-                  // #endregion
                   setHoveredCardId(null);
                   if (onProjectHover) {
                     onProjectHover(null);
@@ -147,8 +135,7 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
               >
                 {/* Project Image */}
                 <motion.div
-                  whileHover={{ scale: 1.01 }}
-                  transition={{ duration: 0.3 }}
+                  whileHover={projectCardHover}
                   onMouseEnter={(e) => e.stopPropagation()}
                   style={{
                     width: '100%',
@@ -200,7 +187,7 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
                       opacity: hoveredCardId === project.id ? 1 : 0,
                       x: hoveredCardId === project.id ? 0 : -10
                     }}
-                    transition={{ duration: 0.2 }}
+                    transition={hoverTransition}
                     style={{
                       fontSize: '0.9rem',
                       color: 'var(--primary-white)',

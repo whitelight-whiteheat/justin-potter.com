@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { DURATION, EASING } from '../utils/animations';
 
 interface HeaderProps {
   onNavigate?: (view: 'main' | 'about' | 'contact' | 'archive') => void;
@@ -27,39 +28,42 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
     { name: 'Archive', view: 'archive' as const, label: 'Archive' }
   ];
 
-  const menuVariants = {
+  const menuVariants: Variants = {
     closed: {
       opacity: 0,
       transition: {
-        duration: 0.3,
+        duration: DURATION.normal,
         staggerChildren: 0.05,
-        staggerDirection: -1
+        staggerDirection: -1,
+        ease: EASING,
       }
     },
     open: {
       opacity: 1,
       transition: {
-        duration: 0.3,
+        duration: DURATION.normal,
         staggerChildren: 0.1,
-        delayChildren: 0.1
+        delayChildren: 0.1,
+        ease: EASING,
       }
     }
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     closed: {
       opacity: 0,
       y: 20,
       transition: {
-        duration: 0.3
+        duration: DURATION.normal,
+        ease: EASING,
       }
     },
     open: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.4,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
+        duration: DURATION.normal,
+        ease: EASING,
       }
     }
   };

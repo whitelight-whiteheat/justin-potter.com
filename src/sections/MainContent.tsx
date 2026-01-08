@@ -1,18 +1,31 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import project1Image from '../assets/landingpage.png';
 import { ProjectData } from '../types';
+import {
+  containerVariants,
+  hoverAnimationVariants,
+  subtitleVariants,
+  projectCardHover,
+  hoverTransition,
+  DURATION,
+  EASING,
+} from '../utils/animations';
+import { getDisplayName, formatDisplayTime } from '../utils/helpers';
+import { useProjectHover, useDisplayTime } from '../utils/hooks';
 
 interface MainContentProps {
   onProjectHover?: (project: ProjectData | null) => void;
 }
 
 const MainContent = ({ onProjectHover }: MainContentProps) => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [animationKey, setAnimationKey] = useState(0);
   const [hoveredProject, setHoveredProject] = useState<ProjectData | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Use shared hooks for consistent behavior
+  const animationKey = useProjectHover(hoveredProject);
+  const currentTime = useDisplayTime(hoveredProject);
 
   const projects = [
     {
@@ -24,36 +37,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
     }
   ];
 
-  // #region agent log
-  useEffect(() => {
-    fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:28',message:'hoveredProject changed',data:{hoveredProject:hoveredProject?.title||null,hasProject:!!hoveredProject,previousKey:animationKey},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'A'})}).catch(()=>{});
-    // Trigger animation when hoveredProject changes to a non-null value
-    if (hoveredProject) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:31',message:'Project hovered, triggering animation',data:{projectTitle:hoveredProject.title,year:hoveredProject.year,oldKey:animationKey},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
-      setAnimationKey(prev => {
-        const newKey = prev + 1;
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:35',message:'animationKey incremented',data:{oldKey:prev,newKey},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
-        // #endregion
-        return newKey;
-      });
-    }
-  }, [hoveredProject, animationKey]);
-  // #endregion
-
-  useEffect(() => {
-    // Only update time if not hovering over a project
-    if (!hoveredProject) {
-      const timer = setInterval(() => {
-        setCurrentTime(new Date());
-      }, 1000);
-
-      return () => clearInterval(timer);
-    }
-  }, [hoveredProject]);
-
   // Notify parent of hover changes
   useEffect(() => {
     if (onProjectHover) {
@@ -61,78 +44,50 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
     }
   }, [hoveredProject, onProjectHover]);
 
-  // Split project name intelligently - "CommerceFlow" becomes "COMMERCE" and "FLOW"
-  const getDisplayName = (projectName: string) => {
-    // If it contains spaces, split on spaces
-    if (projectName.includes(' ')) {
-      const parts = projectName.toUpperCase().split(' ');
-      return parts.length >= 2 ? [parts[0], parts.slice(1).join(' ')] : [parts[0], ''];
-    }
-    // Split camelCase/PascalCase words (e.g., "CommerceFlow" -> ["COMMERCE", "FLOW"])
-    // Match capital letters followed by lowercase letters
-    const words = projectName.match(/[A-Z][a-z]*/g) || [projectName];
-    if (words.length > 1) {
-      return [words[0].toUpperCase(), words.slice(1).join('').toUpperCase()];
-    }
-    // If single word, return as is
-    return [words[0].toUpperCase(), ''];
-  };
-
+  // Get name parts for display
   const nameParts = useMemo(() => {
-    return hoveredProject ? getDisplayName(hoveredProject.title) : ['JUSTIN', 'POTTER'];
+    // #region agent log
+    try {
+      fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:nameParts',message:'nameParts useMemo triggered',data:{hoveredProject:hoveredProject?.title||null,hasProject:!!hoveredProject},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'G'})}).catch(()=>{});
+    } catch (e) {}
+    // #endregion
+    try {
+      const result = hoveredProject ? getDisplayName(hoveredProject.title) : ['JUSTIN', 'POTTER'];
+      // #region agent log
+      try {
+        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:nameParts',message:'nameParts calculated',data:{result,resultLength:result.length},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'G'})}).catch(()=>{});
+      } catch (e) {}
+      // #endregion
+      return result;
+    } catch (error) {
+      // #region agent log
+      try {
+        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:nameParts',message:'ERROR in nameParts calculation',data:{error:error instanceof Error ? error.message : String(error),hoveredProject:hoveredProject?.title||null},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'E'})}).catch(()=>{});
+      } catch (e) {}
+      // #endregion
+      return ['JUSTIN', 'POTTER'];
+    }
   }, [hoveredProject]);
   
-  // #region agent log
-  useEffect(() => {
-    fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:80',message:'nameParts calculated',data:{nameParts,namePartsLength:nameParts.length,animationKey,hoveredProject:hoveredProject?.title||null},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'C'})}).catch(()=>{});
-  }, [nameParts, animationKey, hoveredProject]);
-  // #endregion
-  
   // Display year when hovering, current time otherwise
-  const displayTime = hoveredProject 
-    ? hoveredProject.year.toString() 
-    : currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-  // Split text animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
-      }
+  const displayTime = (() => {
+    // #region agent log
+    try {
+      fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:displayTime',message:'displayTime calculation',data:{hoveredProject:hoveredProject?.title||null,currentTimeType:typeof currentTime},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'H'})}).catch(()=>{});
+    } catch (e) {}
+    // #endregion
+    try {
+      return formatDisplayTime(hoveredProject, currentTime);
+    } catch (error) {
+      // #region agent log
+      try {
+        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:displayTime',message:'ERROR in displayTime',data:{error:error instanceof Error ? error.message : String(error)},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'E'})}).catch(()=>{});
+      } catch (e) {}
+      // #endregion
+      return hoveredProject ? hoveredProject.year.toString() : '00:00:00';
     }
-  };
+  })();
 
-  // Simple hover animation variants
-  const hoverAnimationVariants = {
-    initial: { 
-      opacity: 1,
-      y: 0
-    },
-    animate: {
-      opacity: [1, 0.3, 0.6, 0.2, 0.8, 1],
-      y: [0, -20, -40, -60, -40, 0],
-      transition: {
-        duration: 0.6,
-        times: [0, 0.2, 0.4, 0.6, 0.8, 1],
-        ease: "easeInOut" as const
-      }
-    }
-  };
-
-  const subtitleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        delay: 1.2,
-        duration: 0.6
-      }
-    }
-  };
 
   return (
     <motion.section 
@@ -251,101 +206,105 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               marginRight: '10.5rem'
             }}
           >
-              {hoveredProject ? (
-                <motion.div
-                  key="project-text"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    gap: 0,
-                    width: '100%'
-                  }}
-                >
-                  <p
+              <AnimatePresence mode="wait">
+                {hoveredProject ? (
+                  <motion.div
+                    key="project-text"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: DURATION.normal, ease: EASING }}
                     style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 400,
-                      color: 'var(--primary-white)',
-                      margin: 0,
-                      letterSpacing: '0.1em',
-                      fontFamily: 'var(--font-mono)',
-                      textTransform: 'uppercase',
-                      lineHeight: 1.2
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: 0,
+                      width: '100%'
                     }}
                   >
-                    Design
-                  </p>
-                  <p
+                    <p
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 400,
+                        color: 'var(--primary-white)',
+                        margin: 0,
+                        letterSpacing: '0.1em',
+                        fontFamily: 'var(--font-mono)',
+                        textTransform: 'uppercase',
+                        lineHeight: 1.2
+                      }}
+                    >
+                      Design
+                    </p>
+                    <p
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 400,
+                        color: 'var(--primary-white)',
+                        margin: 0,
+                        letterSpacing: '0.1em',
+                        fontFamily: 'var(--font-mono)',
+                        textTransform: 'uppercase',
+                        lineHeight: 1.2
+                      }}
+                    >
+                      Development
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="default-text"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: DURATION.normal, ease: EASING }}
                     style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 400,
-                      color: 'var(--primary-white)',
-                      margin: 0,
-                      letterSpacing: '0.1em',
-                      fontFamily: 'var(--font-mono)',
-                      textTransform: 'uppercase',
-                      lineHeight: 1.2
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: 0,
+                      width: '100%'
                     }}
                   >
-                    Development
-                  </p>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="default-text"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    gap: 0,
-                    width: '100%'
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 400,
-                      color: 'var(--primary-white)',
-                      margin: 0,
-                      letterSpacing: '0.1em',
-                      fontFamily: 'var(--font-mono)',
-                      textTransform: 'uppercase',
-                      lineHeight: 1.2
-                    }}
-                  >
-                    Designer &
-                  </p>
-                  <p
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: 400,
-                      color: 'var(--primary-white)',
-                      margin: 0,
-                      letterSpacing: '0.1em',
-                      fontFamily: 'var(--font-mono)',
-                      textTransform: 'uppercase',
-                      lineHeight: 1.2,
-                      marginRight: '4.5rem',
-                      marginLeft: '0rem',
-                    }}
-                  >
-                    Developer
-                  </p>
-                </motion.div>
-              )}
+                    <p
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 400,
+                        color: 'var(--primary-white)',
+                        margin: 0,
+                        letterSpacing: '0.1em',
+                        fontFamily: 'var(--font-mono)',
+                        textTransform: 'uppercase',
+                        lineHeight: 1.2
+                      }}
+                    >
+                      Designer &
+                    </p>
+                    <p
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: 400,
+                        color: 'var(--primary-white)',
+                        margin: 0,
+                        letterSpacing: '0.1em',
+                        fontFamily: 'var(--font-mono)',
+                        textTransform: 'uppercase',
+                        lineHeight: 1.2,
+                        marginRight: '4.5rem',
+                        marginLeft: '0rem',
+                      }}
+                    >
+                      Developer
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
           </motion.div>
 
           {/* Brooklyn, NY - Independent positioning */}
@@ -369,35 +328,39 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               marginRight: '-9rem'
             }}
           >
-            {hoveredProject ? (
-              <motion.span
-                key="year"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0
-                }}
-              >
-                {displayTime}
-              </motion.span>
-            ) : (
-              <motion.span
-                key="location"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.2 }}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0
-                }}
-              >
-                Brooklyn, NY {displayTime}
-              </motion.span>
-            )}
+            <AnimatePresence mode="wait">
+              {hoveredProject ? (
+                <motion.span
+                  key="year"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0
+                  }}
+                >
+                  {displayTime}
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="location"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0
+                  }}
+                >
+                  Brooklyn, NY {displayTime}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
         </motion.div>
         </div>
@@ -488,27 +451,15 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                   initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  transition={{ duration: DURATION.slow, delay: index * 0.1, ease: EASING }}
                   data-project-id={project.id}
                   className="bracket-hover"
                   onMouseEnter={(e) => {
-                    // #region agent log
-                    console.log('MainContent onMouseEnter fired', project.title);
-                    fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:380',message:'onMouseEnter triggered',data:{projectId:project.id,projectTitle:project.title,hasCallback:!!onProjectHover},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
-                    // #endregion
                     setHoveredCardId(project.id);
                     const projectData = { title: project.title, year: project.year };
                     setHoveredProject(projectData);
-                    // #region agent log
-                    fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:385',message:'Calling onProjectHover with project data',data:{projectData},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
-                    // #endregion
-                    console.log('Calling onProjectHover with:', projectData);
                   }}
                   onMouseLeave={(e) => {
-                    // #region agent log
-                    console.log('MainContent onMouseLeave fired');
-                    fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:393',message:'onMouseLeave triggered',data:{projectId:project.id},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
-                    // #endregion
                     setHoveredCardId(null);
                     setHoveredProject(null);
                   }}
@@ -526,8 +477,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                 >
                   {/* Project Image */}
                   <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ duration: 0.3 }}
+                    whileHover={projectCardHover}
                     onMouseEnter={(e) => e.stopPropagation()}
                     style={{
                       width: '100%',
@@ -579,7 +529,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                         opacity: hoveredCardId === project.id ? 1 : 0,
                         x: hoveredCardId === project.id ? 0 : -10
                       }}
-                      transition={{ duration: 0.2 }}
+                      transition={hoverTransition}
                       style={{
                         fontSize: '0.9rem',
                         color: 'var(--primary-white)',
