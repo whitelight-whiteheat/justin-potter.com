@@ -1,14 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import '../styles/globals.css';
 import project1Image from '../assets/landingpage.png';
-// import project2Image from '../assets/project-2.png';
-// import project3Image from '../assets/project-3.png';
-
-interface ProjectData {
-  title: string;
-  year: number;
-}
+import { ProjectData } from '../types';
 
 interface ProjectsProps {
   onProjectHover?: (project: ProjectData | null) => void;
@@ -112,13 +105,33 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 data-project-id={project.id}
-                onMouseEnter={() => {
+                className="bracket-hover"
+                onMouseEnter={(e) => {
+                  // #region agent log
+                  console.log('Projects onMouseEnter fired', project.title);
+                  fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Projects.tsx:109',message:'onMouseEnter triggered',data:{projectId:project.id,projectTitle:project.title,hasCallback:!!onProjectHover},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
+                  // #endregion
                   setHoveredCardId(project.id);
-                  onProjectHover?.({ title: project.title, year: project.year });
+                  const projectData = { title: project.title, year: project.year };
+                  // #region agent log
+                  fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Projects.tsx:115',message:'Calling onProjectHover with project data',data:{projectData},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
+                  // #endregion
+                  console.log('Calling onProjectHover with:', projectData);
+                  if (onProjectHover) {
+                    onProjectHover(projectData);
+                  } else {
+                    console.error('onProjectHover is undefined!');
+                  }
                 }}
-                onMouseLeave={() => {
+                onMouseLeave={(e) => {
+                  // #region agent log
+                  console.log('Projects onMouseLeave fired');
+                  fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Projects.tsx:125',message:'onMouseLeave triggered',data:{projectId:project.id},timestamp:Date.now(),sessionId:'debug-session',runId:'run4',hypothesisId:'E'})}).catch((err)=>{console.error('Log fetch failed:',err);});
+                  // #endregion
                   setHoveredCardId(null);
-                  onProjectHover?.(null);
+                  if (onProjectHover) {
+                    onProjectHover(null);
+                  }
                 }}
                 style={{
                   minWidth: '320px',
@@ -128,13 +141,15 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 'var(--spacing-xs)',
-                  position: 'relative'
+                  position: 'relative',
+                  pointerEvents: 'auto'
                 }}
               >
                 {/* Project Image */}
                 <motion.div
                   whileHover={{ scale: 1.01 }}
                   transition={{ duration: 0.3 }}
+                  onMouseEnter={(e) => e.stopPropagation()}
                   style={{
                     width: '100%',
                     height: '220px',
@@ -142,7 +157,8 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
                     overflow: 'hidden',
                     backgroundColor: 'var(--dark-grey)',
                     flexShrink: 0,
-                    zIndex: 1
+                    zIndex: 1,
+                    pointerEvents: 'auto'
                   }}
                 >
                   <img
@@ -162,16 +178,18 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   width: '100%',
-                  paddingTop: 'var(--spacing-xs)'
+                  paddingTop: '-0.55rem'
                 }}>
-                  <div style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--primary-white)',
-                    fontFamily: 'var(--font-mono)',
-                    letterSpacing: '0.1em',
-                    opacity: 0.9
-                  }}>
-                    [{String(index + 1).padStart(2, '0')}]
+                  <div 
+                    style={{
+                      fontSize: '0.875rem',
+                      color: 'var(--primary-white)',
+                      fontFamily: 'var(--font-mono)',
+                      letterSpacing: '0.1em',
+                      opacity: 0.9
+                    }}
+                  >
+                    <span className="bracket">[</span>{String(index + 1).padStart(2, '0')}<span className="bracket">]</span>
                   </div>
                   <motion.a
                     href={project.liveUrl}
@@ -184,13 +202,14 @@ const Projects = ({ onProjectHover }: ProjectsProps) => {
                     }}
                     transition={{ duration: 0.2 }}
                     style={{
-                      fontSize: '0.875rem',
+                      fontSize: '0.9rem',
                       color: 'var(--primary-white)',
                       fontFamily: 'var(--font-mono)',
                       letterSpacing: '0.05em',
                       textDecoration: 'none',
                       cursor: 'pointer',
-                      pointerEvents: hoveredCardId === project.id ? 'auto' : 'none'
+                      pointerEvents: hoveredCardId === project.id ? 'auto' : 'none',
+                      marginTop: '-0.75px'
                     }}
                   >
                     View Project →

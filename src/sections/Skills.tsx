@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import '../styles/globals.css';
 
 const Skills = () => {
   const frontendSkills = [

@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import '../styles/globals.css';
-
-interface ProjectData {
-  title: string;
-  year: number;
-}
+import { ProjectData } from '../types';
 
 interface HeroProps {
   hoveredProject?: ProjectData | null;
@@ -13,6 +8,26 @@ interface HeroProps {
 
 const Hero = ({ hoveredProject }: HeroProps) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [animationKey, setAnimationKey] = useState(0);
+
+  // #region agent log
+  useEffect(() => {
+    fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Hero.tsx:12',message:'hoveredProject changed',data:{hoveredProject:hoveredProject?.title||null,hasProject:!!hoveredProject,previousKey:animationKey},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'A'})}).catch(()=>{});
+    // Trigger animation when hoveredProject changes to a non-null value
+    if (hoveredProject) {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Hero.tsx:18',message:'Project hovered, triggering animation',data:{projectTitle:hoveredProject.title,year:hoveredProject.year,oldKey:animationKey},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
+      setAnimationKey(prev => {
+        const newKey = prev + 1;
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Hero.tsx:22',message:'animationKey incremented',data:{oldKey:prev,newKey},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+        // #endregion
+        return newKey;
+      });
+    }
+  }, [hoveredProject, animationKey]);
+  // #endregion
 
   useEffect(() => {
     // Only update time if not hovering over a project
@@ -42,7 +57,15 @@ const Hero = ({ hoveredProject }: HeroProps) => {
     return [words[0].toUpperCase(), ''];
   };
 
-  const nameParts = hoveredProject ? getDisplayName(hoveredProject.title) : ['JUSTIN', 'POTTER'];
+  const nameParts = useMemo(() => {
+    return hoveredProject ? getDisplayName(hoveredProject.title) : ['JUSTIN', 'POTTER'];
+  }, [hoveredProject]);
+  
+  // #region agent log
+  useEffect(() => {
+    fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Hero.tsx:50',message:'nameParts calculated',data:{nameParts,namePartsLength:nameParts.length,animationKey,hoveredProject:hoveredProject?.title||null},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'C'})}).catch(()=>{});
+  }, [nameParts, animationKey, hoveredProject]);
+  // #endregion
   
   // Display year when hovering, current time otherwise
   const displayTime = hoveredProject 
@@ -61,19 +84,20 @@ const Hero = ({ hoveredProject }: HeroProps) => {
     }
   };
 
-  const textVariants = {
-    hidden: { 
-      opacity: 0, 
-      y: 50,
-      clipPath: 'inset(100% 0 0 0)'
+
+  // Simple hover animation variants
+  const hoverAnimationVariants = {
+    initial: { 
+      opacity: 1,
+      y: 0
     },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      clipPath: 'inset(0% 0 0 0)',
+    animate: {
+      opacity: [1, 0.3, 0.6, 0.2, 0.8, 1],
+      y: [0, -20, -40, -60, -40, 0],
       transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
+        duration: 0.6,
+        times: [0, 0.2, 0.4, 0.6, 0.8, 1],
+        ease: "easeInOut" as const
       }
     }
   };
@@ -128,12 +152,12 @@ const Hero = ({ hoveredProject }: HeroProps) => {
           }}
         >
           {/* Left Side - Name */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', overflow: 'visible' }}>
             <motion.h1
-              key={nameParts[0]}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              key={`${nameParts[0]}-${animationKey}`}
+              initial="initial"
+              animate={hoveredProject ? "animate" : "initial"}
+              variants={hoverAnimationVariants}
               style={{
                 fontSize: 'clamp(3.5rem, 12vw, 9.5rem)',
                 fontWeight: 700,
@@ -142,17 +166,18 @@ const Hero = ({ hoveredProject }: HeroProps) => {
                 color: 'var(--primary-white)',
                 margin: 0,
                 fontFamily: 'var(--font-primary)',
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                position: 'relative'
               }}
             >
               {nameParts[0]}
             </motion.h1>
             {nameParts[1] && (
               <motion.h1
-                key={nameParts[1]}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                key={`${nameParts[1]}-${animationKey}`}
+                initial="initial"
+                animate={hoveredProject ? "animate" : "initial"}
+                variants={hoverAnimationVariants}
                 style={{
                   fontSize: 'clamp(3.5rem, 12vw, 9.5rem)',
                   fontWeight: 700,
@@ -162,7 +187,7 @@ const Hero = ({ hoveredProject }: HeroProps) => {
                   margin: 0,
                   fontFamily: 'var(--font-primary)',
                   textTransform: 'uppercase',
-                  marginTop: '-0.1em'
+                  position: 'relative'
                 }}
               >
                 {nameParts[1]}

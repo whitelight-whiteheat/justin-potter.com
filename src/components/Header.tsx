@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import '../styles/globals.css';
 
 interface HeaderProps {
   onNavigate?: (view: 'main' | 'about' | 'contact') => void;
@@ -139,8 +138,8 @@ const Header = ({ onNavigate }: HeaderProps) => {
                     e.preventDefault();
                     handleNavClick(item.view);
                   }}
-                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  className="bracket-hover"
                   style={{
                     fontSize: '0.875rem',
                     fontWeight: '400',
@@ -153,7 +152,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
                     cursor: 'pointer'
                   }}
                 >
-                  [{item.name}]
+                  <span className="bracket">[</span>{item.name}<span className="bracket">]</span>
                 </motion.a>
               ))}
             </div>

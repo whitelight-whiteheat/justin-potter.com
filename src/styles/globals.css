@@ -1,7 +1,11 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* Global Styles - Clean, Minimal Portfolio */
 :root {
   --primary-black: #000000;
   --primary-white: #ffffff;
+  --lime-green: #32cd32;
   --light-grey: #f8f8f8;
   --medium-grey: #666666;
   --dark-grey: #333333;
@@ -155,6 +159,32 @@ a {
 
 a:hover {
   color: var(--medium-grey);
+}
+
+/* Code */
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Lists */
+ul, ol {
+  list-style: none;
+}
+
+/* Images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Bracket hover effect */
+.bracket {
+  transition: color 0.3s ease;
+  color: inherit;
+}
+
+.bracket-hover:hover .bracket {
+  color: var(--lime-green) !important;
 }
 
 /* Utility Classes */

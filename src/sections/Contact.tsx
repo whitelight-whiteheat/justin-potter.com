@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import '../styles/globals.css';
 import emailIcon from '../assets/email.png';
 import linkedinIcon from '../assets/linkedin.png';
 import githubIcon from '../assets/github.png';
