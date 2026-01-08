@@ -111,14 +111,15 @@ const Header = ({ onNavigate }: HeaderProps) => {
                 setIsMenuOpen(false);
               }}
               style={{
-                fontSize: '1.25rem',
+                fontSize: '0.75rem',
                 fontWeight: '700',
                 color: 'var(--primary-white)',
                 textDecoration: 'none',
                 letterSpacing: '0.05em',
                 cursor: 'pointer',
-                paddingLeft: '0',
-                marginLeft: '0'
+                paddingLeft: '0.50rem',
+                marginLeft: '0',
+                marginTop: '0.50rem',
               }}
             >
               Justin Potter
@@ -127,7 +128,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
             {/* Navigation Links */}
             <div style={{
               display: 'flex',
-              gap: 'var(--spacing-md)',
+              gap: 'var(--spacing-xl)',
               alignItems: 'center'
             }}>
               {navItems.map((item) => (
@@ -143,12 +144,12 @@ const Header = ({ onNavigate }: HeaderProps) => {
                   style={{
                     fontSize: '0.875rem',
                     fontWeight: '400',
-                    color: item.view === 'main' ? 'var(--primary-white)' : 'var(--primary-white)',
+                    color: 'var(--primary-white)',
                     textDecoration: 'none',
                     letterSpacing: '0.1em',
                     textTransform: 'uppercase',
                     fontFamily: 'var(--font-mono)',
-                    opacity: item.view === 'main' ? 1 : 0.7,
+                    opacity: 1,
                     cursor: 'pointer'
                   }}
                 >

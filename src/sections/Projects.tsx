@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/globals.css';
 import project1Image from '../assets/landingpage.png';
-import project2Image from '../assets/project-2.png';
-import project3Image from '../assets/project-3.png';
+// import project2Image from '../assets/project-2.png';
+// import project3Image from '../assets/project-3.png';
 
 interface ProjectData {
   title: string;

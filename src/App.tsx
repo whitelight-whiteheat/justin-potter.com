@@ -25,7 +25,6 @@ function App() {
       flexDirection: 'column'
     }}>
       <Header onNavigate={setActiveView} />
-      
       {/* Main View - Hero + Projects */}
       {activeView === 'main' && (
         <main style={{

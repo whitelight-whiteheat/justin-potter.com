@@ -262,11 +262,7 @@ const Hero = ({ hoveredProject }: HeroProps) => {
                 </motion.p>
               </>
             )}
-            <motion.div
-              key={displayTime}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
+            <div
               style={{
                 marginTop: 'var(--spacing-sm)',
                 fontSize: 'clamp(0.875rem, 1.2vw, 1.125rem)',
@@ -276,23 +272,7 @@ const Hero = ({ hoveredProject }: HeroProps) => {
               }}
             >
               {hoveredProject ? displayTime : `Brooklyn, NY ${displayTime}`}
-            </motion.div>
-            <motion.a
-              href="#contact"
-              whileHover={{ x: 5 }}
-              style={{
-                marginTop: 'var(--spacing-xs)',
-                fontSize: 'clamp(0.875rem, 1.2vw, 1.125rem)',
-                color: 'var(--primary-white)',
-                fontWeight: 300,
-                textDecoration: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                fontFamily: 'var(--font-mono)'
-              }}
-            >
-              [ Contact ]
-            </motion.a>
+            </div>
           </motion.div>
         </motion.div>
       </motion.div>
