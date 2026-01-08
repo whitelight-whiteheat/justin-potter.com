@@ -7,8 +7,14 @@ import Projects from './sections/Projects';
 import Contact from './sections/Contact';
 import Footer from './components/Footer';
 
+interface ProjectData {
+  title: string;
+  year: number;
+}
+
 function App() {
   const [activeView, setActiveView] = useState<'main' | 'about' | 'contact'>('main');
+  const [hoveredProject, setHoveredProject] = useState<ProjectData | null>(null);
 
   return (
     <div className="App" id="top" style={{
@@ -28,13 +34,14 @@ function App() {
           position: 'relative',
           height: '100%',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          justifyContent: 'space-between'
         }}>
           <div style={{ flexShrink: 0 }}>
-            <Hero />
+            <Hero hoveredProject={hoveredProject} />
           </div>
-          <div style={{ flex: 1, overflow: 'hidden' }}>
-            <Projects />
+          <div style={{ flexShrink: 0, overflow: 'hidden', display: 'flex', alignItems: 'flex-end' }}>
+            <Projects onProjectHover={setHoveredProject} />
           </div>
         </main>
       )}

@@ -28,9 +28,9 @@ const Skills = () => {
       whileHover={{ scale: 1.02, y: -5 }}
       style={{ 
         padding: 'var(--spacing-md)',
-        backgroundColor: 'var(--primary-white)',
+        backgroundColor: 'var(--dark-grey)',
         borderRadius: '8px',
-        border: '1px solid var(--border-grey)',
+        border: '1px solid var(--medium-grey)',
         transition: 'all 0.3s ease',
         cursor: 'pointer'
       }}
@@ -50,7 +50,7 @@ const Skills = () => {
           {skill.name}
         </h4>
         <span style={{ 
-          color: 'var(--medium-grey)', 
+          color: 'var(--primary-white)', 
           fontSize: '0.9rem',
           fontWeight: '500'
         }}>
@@ -60,7 +60,7 @@ const Skills = () => {
       <div style={{ 
         width: '100%', 
         height: '8px', 
-        backgroundColor: 'var(--light-grey)',
+        backgroundColor: 'var(--dark-grey)',
         borderRadius: '4px',
         overflow: 'hidden'
       }}>
@@ -81,7 +81,7 @@ const Skills = () => {
 
   return (
     <section id="experience" className="section" style={{
-      backgroundColor: 'var(--light-grey)',
+      backgroundColor: 'var(--primary-black)',
       minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
@@ -96,7 +96,7 @@ const Skills = () => {
           style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}
         >
           <motion.div style={{ 
-            color: 'var(--medium-grey)', 
+            color: 'var(--primary-white)', 
             fontSize: '0.875rem',
             fontWeight: 400,
             marginBottom: 'var(--spacing-sm)',

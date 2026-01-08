@@ -1,8 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/globals.css';
 
-const Hero = () => {
+interface ProjectData {
+  title: string;
+  year: number;
+}
+
+interface HeroProps {
+  hoveredProject?: ProjectData | null;
+}
+
+const Hero = ({ hoveredProject }: HeroProps) => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    // Only update time if not hovering over a project
+    if (!hoveredProject) {
+      const timer = setInterval(() => {
+        setCurrentTime(new Date());
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [hoveredProject]);
+
+  // Split project name intelligently - "CommerceFlow" becomes "COMMERCE" and "FLOW"
+  const getDisplayName = (projectName: string) => {
+    // If it contains spaces, split on spaces
+    if (projectName.includes(' ')) {
+      const parts = projectName.toUpperCase().split(' ');
+      return parts.length >= 2 ? [parts[0], parts.slice(1).join(' ')] : [parts[0], ''];
+    }
+    // Split camelCase/PascalCase words (e.g., "CommerceFlow" -> ["COMMERCE", "FLOW"])
+    // Match capital letters followed by lowercase letters
+    const words = projectName.match(/[A-Z][a-z]*/g) || [projectName];
+    if (words.length > 1) {
+      return [words[0].toUpperCase(), words.slice(1).join('').toUpperCase()];
+    }
+    // If single word, return as is
+    return [words[0].toUpperCase(), ''];
+  };
+
+  const nameParts = hoveredProject ? getDisplayName(hoveredProject.title) : ['JUSTIN', 'POTTER'];
+  
+  // Display year when hovering, current time otherwise
+  const displayTime = hoveredProject 
+    ? hoveredProject.year.toString() 
+    : currentTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
   // Split text animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -50,13 +96,13 @@ const Hero = () => {
       style={{
         height: 'auto',
         minHeight: 'auto',
-        padding: 'calc(var(--spacing-lg) + 80px) 0 var(--spacing-md) 0',
+        padding: 'calc(var(--spacing-lg) + 50px) 0 0 0',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
         overflow: 'hidden',
-        backgroundColor: 'var(--primary-white)'
+        backgroundColor: 'var(--primary-black)'
       }}
     >
       {/* Main Content */}
@@ -74,120 +120,179 @@ const Hero = () => {
           initial="hidden"
           animate="visible"
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: '0'
+            display: 'grid',
+            gridTemplateColumns: '1fr auto',
+            alignItems: 'center',
+            gap: 'var(--spacing-xl)',
+            width: '100%'
           }}
         >
-          {/* First Name - "JUSTIN" */}
-          <motion.h1
-            variants={textVariants}
-            style={{
-              fontSize: 'clamp(4rem, 14vw, 11rem)',
-              fontWeight: 700,
-              lineHeight: 0.85,
-              letterSpacing: '-0.03em',
-              color: 'var(--primary-black)',
-              margin: 0,
-              fontFamily: 'var(--font-primary)',
-              textTransform: 'uppercase'
-            }}
-          >
-            JUSTIN
-          </motion.h1>
+          {/* Left Side - Name */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <motion.h1
+              key={nameParts[0]}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                fontSize: 'clamp(3.5rem, 12vw, 9.5rem)',
+                fontWeight: 700,
+                lineHeight: 0.85,
+                letterSpacing: '-0.03em',
+                color: 'var(--primary-white)',
+                margin: 0,
+                fontFamily: 'var(--font-primary)',
+                textTransform: 'uppercase'
+              }}
+            >
+              {nameParts[0]}
+            </motion.h1>
+            {nameParts[1] && (
+              <motion.h1
+                key={nameParts[1]}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  fontSize: 'clamp(3.5rem, 12vw, 9.5rem)',
+                  fontWeight: 700,
+                  lineHeight: 0.85,
+                  letterSpacing: '-0.03em',
+                  color: 'var(--primary-white)',
+                  margin: 0,
+                  fontFamily: 'var(--font-primary)',
+                  textTransform: 'uppercase',
+                  marginTop: '-0.1em'
+                }}
+              >
+                {nameParts[1]}
+              </motion.h1>
+            )}
+          </div>
 
-          {/* Last Name - "POTTER" */}
-          <motion.h1
-            variants={textVariants}
-            style={{
-              fontSize: 'clamp(4rem, 14vw, 11rem)',
-              fontWeight: 700,
-              lineHeight: 0.85,
-              letterSpacing: '-0.03em',
-              color: 'var(--primary-black)',
-              margin: 0,
-              fontFamily: 'var(--font-primary)',
-              textTransform: 'uppercase',
-              marginTop: '-0.1em'
-            }}
-          >
-            POTTER
-          </motion.h1>
-
-          {/* Subtitle Section */}
+          {/* Right Side - Role & Location */}
           <motion.div
             variants={subtitleVariants}
             initial="hidden"
             animate="visible"
             style={{
-              marginTop: 'var(--spacing-md)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.5rem'
+              alignItems: 'flex-end',
+              gap: '0',
+              textAlign: 'right'
             }}
           >
-            <motion.p
-              style={{
-                fontSize: 'clamp(1.125rem, 1.8vw, 1.75rem)',
-                fontWeight: 400,
-                color: 'var(--medium-grey)',
-                margin: 0,
-                letterSpacing: '0.01em'
-              }}
-            >
-              Fullstack Developer
-            </motion.p>
-            
+            {hoveredProject ? (
+              <>
+                <motion.p
+                  key="design"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                    fontWeight: 400,
+                    color: 'var(--primary-white)',
+                    margin: 0,
+                    letterSpacing: '0.05em',
+                    fontFamily: 'var(--font-mono)',
+                    textTransform: 'uppercase',
+                    lineHeight: 1.2
+                  }}
+                >
+                  Design
+                </motion.p>
+                <motion.p
+                  key="development"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.05 }}
+                  style={{
+                    fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                    fontWeight: 400,
+                    color: 'var(--primary-white)',
+                    margin: 0,
+                    letterSpacing: '0.05em',
+                    fontFamily: 'var(--font-mono)',
+                    textTransform: 'uppercase',
+                    lineHeight: 1.2
+                  }}
+                >
+                  Development
+                </motion.p>
+              </>
+            ) : (
+              <>
+                <motion.p
+                  key="designer"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                    fontWeight: 400,
+                    color: 'var(--primary-white)',
+                    margin: 0,
+                    letterSpacing: '0.05em',
+                    fontFamily: 'var(--font-mono)',
+                    textTransform: 'uppercase',
+                    lineHeight: 1.2
+                  }}
+                >
+                  Designer &
+                </motion.p>
+                <motion.p
+                  key="developer"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.05 }}
+                  style={{
+                    fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
+                    fontWeight: 400,
+                    color: 'var(--primary-white)',
+                    margin: 0,
+                    letterSpacing: '0.05em',
+                    fontFamily: 'var(--font-mono)',
+                    textTransform: 'uppercase',
+                    lineHeight: 1.2
+                  }}
+                >
+                  Developer
+                </motion.p>
+              </>
+            )}
             <motion.div
+              key={displayTime}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
               style={{
-                display: 'flex',
-                gap: 'var(--spacing-sm)',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                marginTop: '0.25rem'
+                marginTop: 'var(--spacing-sm)',
+                fontSize: 'clamp(0.875rem, 1.2vw, 1.125rem)',
+                color: 'var(--primary-white)',
+                fontFamily: 'var(--font-mono)',
+                letterSpacing: '0.05em'
               }}
             >
-              <motion.span
-                style={{
-                  fontSize: 'clamp(1rem, 1.3vw, 1.25rem)',
-                  color: 'var(--medium-grey)',
-                  fontWeight: 300
-                }}
-              >
-                Brooklyn, NY
-              </motion.span>
-              
-              <motion.span
-                style={{
-                  fontSize: '1rem',
-                  color: 'var(--border-grey)',
-                  margin: '0 0.25rem'
-                }}
-              >
-                •
-              </motion.span>
-
-              <motion.a
-                href="#contact"
-                whileHover={{ 
-                  color: 'var(--primary-black)',
-                  x: 5
-                }}
-                style={{
-                  fontSize: 'clamp(1rem, 1.3vw, 1.25rem)',
-                  color: 'var(--medium-grey)',
-                  fontWeight: 300,
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                <span style={{ opacity: 0.3 }}>[</span>
-                Contact
-                <span style={{ opacity: 0.3 }}>]</span>
-              </motion.a>
+              {hoveredProject ? displayTime : `Brooklyn, NY ${displayTime}`}
             </motion.div>
+            <motion.a
+              href="#contact"
+              whileHover={{ x: 5 }}
+              style={{
+                marginTop: 'var(--spacing-xs)',
+                fontSize: 'clamp(0.875rem, 1.2vw, 1.125rem)',
+                color: 'var(--primary-white)',
+                fontWeight: 300,
+                textDecoration: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                fontFamily: 'var(--font-mono)'
+              }}
+            >
+              [ Contact ]
+            </motion.a>
           </motion.div>
         </motion.div>
       </motion.div>

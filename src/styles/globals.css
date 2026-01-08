@@ -8,7 +8,7 @@
   --border-grey: #e0e0e0;
   
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
   
   --spacing-xs: 0.5rem;
   --spacing-sm: 0.75rem;
@@ -37,8 +37,8 @@ body {
   height: 100%;
   font-family: var(--font-primary);
   line-height: 1.6;
-  color: var(--primary-black);
-  background-color: var(--primary-white);
+  color: var(--primary-white);
+  background-color: var(--primary-black);
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -87,7 +87,7 @@ h4 {
 
 p {
   margin-bottom: var(--spacing-sm);
-  color: var(--medium-grey);
+  color: var(--primary-white);
   font-size: 1.125rem;
   line-height: 1.7;
 }
@@ -131,22 +131,24 @@ p {
 
 .btn:hover {
   background-color: transparent;
-  color: var(--primary-black);
+  color: var(--primary-white);
+  border-color: var(--primary-white);
 }
 
 .btn-outline {
   background-color: transparent;
-  color: var(--primary-black);
+  color: var(--primary-white);
+  border-color: var(--primary-white);
 }
 
 .btn-outline:hover {
-  background-color: var(--primary-black);
-  color: var(--primary-white);
+  background-color: var(--primary-white);
+  color: var(--primary-black);
 }
 
 /* Links */
 a {
-  color: var(--primary-black);
+  color: var(--primary-white);
   text-decoration: none;
   transition: color 0.3s ease;
 }

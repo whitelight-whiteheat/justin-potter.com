@@ -18,7 +18,7 @@ const Footer = () => {
     }}>
       <div className="container">
         <p style={{
-          color: 'var(--medium-grey)',
+          color: 'var(--primary-white)',
           fontSize: '0.75rem',
           margin: 0,
           fontWeight: 300,

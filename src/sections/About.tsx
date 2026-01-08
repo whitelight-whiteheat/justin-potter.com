@@ -7,7 +7,7 @@ import educationIcon from '../assets/education.png';
 const About = () => {
   return (
     <section id="about" className="section" style={{ 
-      backgroundColor: 'var(--primary-white)',
+      backgroundColor: 'var(--primary-black)',
       height: '100%',
       display: 'flex',
       alignItems: 'center',
@@ -93,9 +93,9 @@ const About = () => {
               whileHover={{ scale: 1.02, y: -5 }}
               style={{ 
                 padding: 'var(--spacing-md)',
-                backgroundColor: 'var(--light-grey)',
+                backgroundColor: 'var(--dark-grey)',
                 borderRadius: '8px',
-                border: '1px solid var(--border-grey)',
+                border: '1px solid var(--medium-grey)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 'var(--spacing-md)',
@@ -125,7 +125,7 @@ const About = () => {
                   fontSize: '1.125rem',
                   fontWeight: 500,
                   marginBottom: '0.5rem',
-                  color: 'var(--primary-black)'
+                  color: 'var(--primary-white)'
                 }}>
                   Experience
                 </h4>
@@ -142,9 +142,9 @@ const About = () => {
               whileHover={{ scale: 1.02, y: -5 }}
               style={{ 
                 padding: 'var(--spacing-md)',
-                backgroundColor: 'var(--light-grey)',
+                backgroundColor: 'var(--dark-grey)',
                 borderRadius: '8px',
-                border: '1px solid var(--border-grey)',
+                border: '1px solid var(--medium-grey)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 'var(--spacing-md)',
@@ -174,7 +174,7 @@ const About = () => {
                   fontSize: '1.125rem',
                   fontWeight: 500,
                   marginBottom: '0.5rem',
-                  color: 'var(--primary-black)'
+                  color: 'var(--primary-white)'
                 }}>
                   Education
                 </h4>

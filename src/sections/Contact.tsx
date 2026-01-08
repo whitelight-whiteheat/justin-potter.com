@@ -32,7 +32,7 @@ const Contact = () => {
 
   return (
     <section id="contact" className="section" style={{
-      backgroundColor: 'var(--light-grey)',
+      backgroundColor: 'var(--primary-black)',
       height: '100%',
       display: 'flex',
       alignItems: 'center',
@@ -60,7 +60,7 @@ const Contact = () => {
           <motion.h2 style={{
             fontSize: 'clamp(2rem, 5vw, 4rem)',
             fontWeight: 400,
-            color: 'var(--primary-black)',
+            color: 'var(--primary-white)',
             margin: 0,
             letterSpacing: '-0.02em'
           }}>
@@ -106,9 +106,9 @@ const Contact = () => {
               whileHover={{ scale: 1.05, y: -5 }}
               style={{ 
                 padding: 'var(--spacing-md)',
-                backgroundColor: 'var(--primary-white)',
+                backgroundColor: 'var(--dark-grey)',
                 borderRadius: '8px',
-                border: '1px solid var(--border-grey)',
+                border: '1px solid var(--medium-grey)',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -139,16 +139,16 @@ const Contact = () => {
                 Email
               </h4>
               <a href={`mailto:${contactInfo.email}`} style={{ 
-                color: 'var(--medium-grey)',
+                color: 'var(--primary-white)',
                 fontSize: '1rem',
                 textDecoration: 'none',
                 transition: 'color 0.3s ease'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--primary-black)';
+                e.currentTarget.style.color = 'var(--medium-grey)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--medium-grey)';
+                e.currentTarget.style.color = 'var(--primary-white)';
               }}>
                 {contactInfo.email}
               </a>
@@ -158,9 +158,9 @@ const Contact = () => {
               whileHover={{ scale: 1.05, y: -5 }}
               style={{ 
                 padding: 'var(--spacing-md)',
-                backgroundColor: 'var(--primary-white)',
+                backgroundColor: 'var(--dark-grey)',
                 borderRadius: '8px',
-                border: '1px solid var(--border-grey)',
+                border: '1px solid var(--medium-grey)',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -192,9 +192,9 @@ const Contact = () => {
               whileHover={{ scale: 1.05, y: -5 }}
               style={{ 
                 padding: 'var(--spacing-md)',
-                backgroundColor: 'var(--primary-white)',
+                backgroundColor: 'var(--dark-grey)',
                 borderRadius: '8px',
-                border: '1px solid var(--border-grey)',
+                border: '1px solid var(--medium-grey)',
                 transition: 'all 0.3s ease'
               }}
             >
@@ -257,11 +257,11 @@ const Contact = () => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     padding: 'var(--spacing-md)',
-                    backgroundColor: 'var(--primary-white)',
+                    backgroundColor: 'var(--dark-grey)',
                     borderRadius: '8px',
-                    border: '1px solid var(--border-grey)',
+                    border: '1px solid var(--medium-grey)',
                     textDecoration: 'none',
-                    color: 'var(--primary-black)',
+                    color: 'var(--primary-white)',
                     transition: 'all 0.3s ease',
                     minWidth: '120px'
                   }}

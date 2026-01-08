@@ -83,17 +83,20 @@ const Header = ({ onNavigate }: HeaderProps) => {
           left: 0,
           right: 0,
           zIndex: 1000,
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
           backdropFilter: 'blur(20px)',
           transition: 'all 0.3s ease'
         }}
       >
-        <div className="container">
+        <div style={{ width: '100%', padding: '0' }}>
           <nav style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: 'var(--spacing-md) 0'
+            paddingTop: '0',
+            paddingBottom: 'var(--spacing-md)',
+            paddingRight: 'var(--spacing-md)',
+            paddingLeft: '0'
           }}>
             {/* Logo/Home Link */}
             <motion.a
@@ -110,36 +113,49 @@ const Header = ({ onNavigate }: HeaderProps) => {
               style={{
                 fontSize: '1.25rem',
                 fontWeight: '700',
-                color: 'var(--primary-black)',
+                color: 'var(--primary-white)',
                 textDecoration: 'none',
                 letterSpacing: '0.05em',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                paddingLeft: '0',
+                marginLeft: '0'
               }}
             >
-              JP
+              Justin Potter
             </motion.a>
 
-            {/* Menu Toggle Button */}
-            <motion.button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '0.5rem',
-                fontSize: '1rem',
-                fontWeight: '500',
-                color: 'var(--primary-black)',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                position: 'relative',
-                zIndex: 1001
-              }}
-            >
-              {isMenuOpen ? 'Close' : 'Menu'}
-            </motion.button>
+            {/* Navigation Links */}
+            <div style={{
+              display: 'flex',
+              gap: 'var(--spacing-md)',
+              alignItems: 'center'
+            }}>
+              {navItems.map((item) => (
+                <motion.a
+                  key={item.name}
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.view);
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: '400',
+                    color: item.view === 'main' ? 'var(--primary-white)' : 'var(--primary-white)',
+                    textDecoration: 'none',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    fontFamily: 'var(--font-mono)',
+                    opacity: item.view === 'main' ? 1 : 0.7,
+                    cursor: 'pointer'
+                  }}
+                >
+                  [{item.name}]
+                </motion.a>
+              ))}
+            </div>
           </nav>
         </div>
       </motion.header>
@@ -161,7 +177,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                backgroundColor: 'rgba(0, 0, 0, 0.95)',
                 backdropFilter: 'blur(20px)',
                 zIndex: 999
               }}
@@ -214,7 +230,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
                       style={{
                         fontSize: 'clamp(2rem, 6vw, 4rem)',
                         fontWeight: 400,
-                        color: 'var(--primary-black)',
+                        color: 'var(--primary-white)',
                         textDecoration: 'none',
                         letterSpacing: '0.05em',
                         display: 'block',
@@ -232,7 +248,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
                       transition={{ delay: 0.3 + index * 0.1 }}
                       style={{
                         fontSize: '0.875rem',
-                        color: 'var(--medium-grey)',
+                        color: 'var(--primary-white)',
                         marginTop: '0.5rem',
                         fontWeight: 300,
                         letterSpacing: '0.1em',
@@ -257,7 +273,7 @@ const Header = ({ onNavigate }: HeaderProps) => {
                   transform: 'translateX(-50%)',
                   textAlign: 'center',
                   fontSize: '0.875rem',
-                  color: 'var(--medium-grey)',
+                  color: 'var(--primary-white)',
                   fontWeight: 300,
                   letterSpacing: '0.05em'
                 }}
