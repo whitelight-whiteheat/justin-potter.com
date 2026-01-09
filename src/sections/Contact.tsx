@@ -30,14 +30,21 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="section" style={{
-      backgroundColor: 'var(--primary-black)',
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      overflow: 'auto'
-    }}>
+    <section 
+      id="contact" 
+      style={{
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'auto',
+        paddingTop: 'calc(var(--spacing-lg) + 80px)',
+        paddingBottom: 'var(--spacing-xl)',
+        paddingLeft: 'var(--projects-section-padding)',
+        paddingRight: 'var(--projects-section-padding)',
+        backgroundColor: 'transparent'
+      }}
+    >
       <div className="container" style={{ width: '100%', maxWidth: '1200px' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}

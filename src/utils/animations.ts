@@ -23,18 +23,20 @@ export const containerVariants: Variants = {
 };
 
 // Hover animation variants - consistent across all components
+// Optimized: reduced keyframes for better performance
 export const hoverAnimationVariants: Variants = {
   initial: {
     opacity: 1,
     scale: 1,
   },
   animate: {
-    opacity: [1, 0.5, 1],
+    opacity: [1, 0.6, 1],
     scale: [1, 1.01, 1],
     transition: {
       duration: DURATION.normal,
       times: [0, 0.5, 1],
       ease: EASING,
+      // Use will-change for better performance
     },
   },
 };

@@ -34,6 +34,27 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
       imageUrl: project1Image,
       liveUrl: 'https://commerce-flow-v2.vercel.app/',
       year: 2025
+    },
+    {
+      id: 2,
+      title: 'Portfolio Site',
+      imageUrl: project1Image, // Placeholder - replace with actual project image
+      liveUrl: 'https://www.justin-potter.com/',
+      year: 2025
+    },
+    {
+      id: 3,
+      title: 'Task Manager',
+      imageUrl: project1Image, // Placeholder - replace with actual project image
+      liveUrl: '#',
+      year: 2024
+    },
+    {
+      id: 4,
+      title: 'API Dashboard',
+      imageUrl: project1Image, // Placeholder - replace with actual project image
+      liveUrl: '#',
+      year: 2024
     }
   ];
 
@@ -46,44 +67,18 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
 
   // Get name parts for display
   const nameParts = useMemo(() => {
-    // #region agent log
     try {
-      fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:nameParts',message:'nameParts useMemo triggered',data:{hoveredProject:hoveredProject?.title||null,hasProject:!!hoveredProject},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'G'})}).catch(()=>{});
-    } catch (e) {}
-    // #endregion
-    try {
-      const result = hoveredProject ? getDisplayName(hoveredProject.title) : ['JUSTIN', 'POTTER'];
-      // #region agent log
-      try {
-        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:nameParts',message:'nameParts calculated',data:{result,resultLength:result.length},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'G'})}).catch(()=>{});
-      } catch (e) {}
-      // #endregion
-      return result;
+      return hoveredProject ? getDisplayName(hoveredProject.title) : ['JUSTIN', 'POTTER'];
     } catch (error) {
-      // #region agent log
-      try {
-        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:nameParts',message:'ERROR in nameParts calculation',data:{error:error instanceof Error ? error.message : String(error),hoveredProject:hoveredProject?.title||null},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'E'})}).catch(()=>{});
-      } catch (e) {}
-      // #endregion
       return ['JUSTIN', 'POTTER'];
     }
   }, [hoveredProject]);
   
   // Display year when hovering, current time otherwise
   const displayTime = (() => {
-    // #region agent log
-    try {
-      fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:displayTime',message:'displayTime calculation',data:{hoveredProject:hoveredProject?.title||null,currentTimeType:typeof currentTime},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'H'})}).catch(()=>{});
-    } catch (e) {}
-    // #endregion
     try {
       return formatDisplayTime(hoveredProject, currentTime);
     } catch (error) {
-      // #region agent log
-      try {
-        fetch('http://127.0.0.1:7242/ingest/3355fed9-9be5-4c30-a353-6450cdb51e60',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MainContent.tsx:displayTime',message:'ERROR in displayTime',data:{error:error instanceof Error ? error.message : String(error)},timestamp:Date.now(),sessionId:'debug-session',runId:'error-debug',hypothesisId:'E'})}).catch(()=>{});
-      } catch (e) {}
-      // #endregion
       return hoveredProject ? hoveredProject.year.toString() : '00:00:00';
     }
   })();
@@ -91,7 +86,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
 
   return (
     <motion.section 
-      className="background-grid"
       style={{
         width: '100%',
         height: '100%',
@@ -100,7 +94,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
         justifyContent: 'space-between',
         position: 'relative',
         overflow: 'hidden',
-        padding: 'calc(var(--spacing-lg) + 50px) 0 var(--spacing-sm) 0'
+        padding: 'calc(var(--spacing-lg) + 50px) 0 var(--spacing-sm) 0',
+        backgroundColor: 'transparent'
       }}
     >
       {/* Hero and Projects in separate containers */}
@@ -120,7 +115,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
         <div
           style={{
             width: '100%',
-            padding: '0 20rem 0 0',
+            padding: `0 var(--hero-right-padding) 0 0`,
             margin: '0',
             flexShrink: 0,
             position: 'relative'
@@ -132,17 +127,25 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             animate="visible"
             style={{
               display: 'grid',
-              gridTemplateColumns: '1fr auto',
+              gridTemplateColumns: '1fr auto auto',
+              gridTemplateRows: 'auto auto',
               alignItems: 'flex-start',
-              gap: 'var(--spacing-sm)',
+              gap: 'var(--spacing-md)',
               width: '100%',
-              marginTop: '10rem',
-              marginLeft: '1rem',
+              marginTop: 'var(--hero-top-margin)',
+              marginLeft: 'var(--hero-left-margin)',
               position: 'relative'
             }}
           >
-          {/* Left Side - Name */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', overflow: 'visible' }}>
+          {/* Name - spans first column and both rows */}
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'flex-start', 
+            overflow: 'visible',
+            gridColumn: '1',
+            gridRow: '1 / 3'
+          }}>
             <motion.h1
               key={`${nameParts[0]}-${animationKey}`}
               initial="initial"
@@ -185,25 +188,22 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             )}
           </div>
 
-          {/* Designer & Developer - Independent positioning */}
+          {/* Designer & Developer / Design & Development - Second column, first row */}
           <motion.div
             variants={subtitleVariants}
             initial="hidden"
             animate="visible"
             style={{
-              position: 'absolute',
-              top: 0,
-              right: '10rem',
+              gridColumn: '2',
+              gridRow: '1',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
               gap: 0,
               textAlign: 'left',
-              maxWidth: '6rem',
-              overflow: 'visible',
-              transform: 'translateX(calc(-1 * (var(--spacing-xl) * 2 + 3rem)))',
-              minHeight: '2.4rem',
-              marginRight: '10.5rem'
+              minWidth: '6rem',
+              position: 'relative',
+              minHeight: '2.4rem'
             }}
           >
               <AnimatePresence mode="wait">
@@ -215,9 +215,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: DURATION.normal, ease: EASING }}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'flex-start',
@@ -262,9 +259,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: DURATION.normal, ease: EASING }}
                     style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'flex-start',
@@ -295,9 +289,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                         letterSpacing: '0.1em',
                         fontFamily: 'var(--font-mono)',
                         textTransform: 'uppercase',
-                        lineHeight: 1.2,
-                        marginRight: '4.5rem',
-                        marginLeft: '0rem',
+                        lineHeight: 1.2
                       }}
                     >
                       Developer
@@ -307,12 +299,11 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               </AnimatePresence>
           </motion.div>
 
-          {/* Brooklyn, NY - Independent positioning */}
+          {/* Location/Time - Second column, second row */}
           <div
             style={{
-              position: 'absolute',
-              top: 0,
-              right: '10rem',
+              gridColumn: '2',
+              gridRow: '2',
               fontSize: '0.875rem',
               fontWeight: 400,
               color: 'var(--primary-white)',
@@ -321,11 +312,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               textTransform: 'uppercase',
               margin: 0,
               textAlign: 'left',
-              maxWidth: '8rem',
-              overflow: 'visible',
-              whiteSpace: 'normal',
-              minHeight: '1.05rem',
-              marginRight: '-9rem'
+              position: 'relative',
+              minHeight: '1.05rem'
             }}
           >
             <AnimatePresence mode="wait">
@@ -336,11 +324,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0
-                  }}
                 >
                   {displayTime}
                 </motion.span>
@@ -351,11 +334,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
                   transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0
-                  }}
                 >
                   Brooklyn, NY {displayTime}
                 </motion.span>
@@ -374,12 +352,46 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             justifyContent: 'flex-end',
             flexShrink: 0,
             paddingTop: 'var(--spacing-md)',
-            paddingBottom: '2rem',
-            paddingLeft: '85px',
-            paddingRight: '85px',
+            paddingBottom: 'var(--spacing-md)',
+            paddingLeft: 'var(--projects-section-padding)',
+            paddingRight: 'var(--projects-section-padding)',
             boxSizing: 'border-box'
           }}
         >
+          {/* Featured Projects Label */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 'var(--spacing-md)',
+            paddingLeft: 'var(--spacing-md)',
+            paddingRight: 'var(--spacing-md)'
+          }}>
+            <h2 style={{
+              fontSize: '0.875rem',
+              fontWeight: 400,
+              color: 'var(--primary-white)',
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              margin: 0
+            }}>
+              Featured Projects
+            </h2>
+            <p style={{
+              fontSize: '0.75rem',
+              fontWeight: 300,
+              color: 'var(--medium-grey)',
+              fontFamily: 'var(--font-mono)',
+              letterSpacing: '0.05em',
+              textTransform: 'lowercase',
+              margin: 0,
+              fontStyle: 'italic'
+            }}>
+              (Swipe)
+            </p>
+          </div>
+
           {/* Horizontal Scrollable Projects Container */}
           <div
             ref={containerRef}
@@ -446,8 +458,11 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               margin: '0 auto'
             }}>
               {projects.map((project, index) => (
-                <motion.div
+                <motion.a
                   key={project.id}
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
@@ -463,6 +478,10 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     setHoveredCardId(null);
                     setHoveredProject(null);
                   }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: DURATION.fast, ease: EASING }
+                  }}
                   style={{
                     minWidth: '320px',
                     maxWidth: '320px',
@@ -472,12 +491,17 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     flexDirection: 'column',
                     gap: 'var(--spacing-xs)',
                     position: 'relative',
-                    pointerEvents: 'auto'
+                    pointerEvents: 'auto',
+                    cursor: 'pointer',
+                    textDecoration: 'none'
                   }}
                 >
                   {/* Project Image */}
                   <motion.div
-                    whileHover={projectCardHover}
+                    whileHover={{ 
+                      scale: 1.05,
+                      transition: { duration: DURATION.fast, ease: EASING }
+                    }}
                     onMouseEnter={(e) => e.stopPropagation()}
                     style={{
                       width: '100%',
@@ -487,18 +511,42 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                       backgroundColor: 'var(--dark-grey)',
                       flexShrink: 0,
                       zIndex: 1,
-                      pointerEvents: 'auto'
+                      pointerEvents: 'auto',
+                      borderRadius: '2px'
                     }}
                   >
-                    <img
+                    <motion.img
                       src={project.imageUrl}
                       alt={project.title}
+                      whileHover={{
+                        filter: 'brightness(1.1)',
+                        transition: { duration: DURATION.fast, ease: EASING }
+                      }}
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover'
+                        objectFit: 'cover',
+                        transition: 'filter 0.3s ease'
                       }}
                     />
+                    {/* Overlay on hover */}
+                    {hoveredCardId === project.id && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: DURATION.fast }}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.1) 100%)',
+                          pointerEvents: 'none'
+                        }}
+                      />
+                    )}
                   </motion.div>
 
                   {/* Project Number and View Link */}
@@ -520,14 +568,15 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     >
                       <span className="bracket">[</span>{String(index + 1).padStart(2, '0')}<span className="bracket">]</span>
                     </div>
-                    <motion.a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <motion.span
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ 
                         opacity: hoveredCardId === project.id ? 1 : 0,
                         x: hoveredCardId === project.id ? 0 : -10
+                      }}
+                      whileHover={{ 
+                        color: 'var(--lime-green)',
+                        x: hoveredCardId === project.id ? 5 : 0
                       }}
                       transition={hoverTransition}
                       style={{
@@ -535,16 +584,16 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                         color: 'var(--primary-white)',
                         fontFamily: 'var(--font-mono)',
                         letterSpacing: '0.05em',
-                        textDecoration: 'none',
                         cursor: 'pointer',
-                        pointerEvents: hoveredCardId === project.id ? 'auto' : 'none',
-                        marginTop: '-0.75px'
+                        pointerEvents: 'none',
+                        marginTop: '-0.75px',
+                        transition: 'color 0.3s ease'
                       }}
                     >
                       View Project →
-                    </motion.a>
+                    </motion.span>
                   </div>
-                </motion.div>
+                </motion.a>
               ))}
             </div>
           </div>

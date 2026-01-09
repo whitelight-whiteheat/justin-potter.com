@@ -87,8 +87,7 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
           left: 0,
           right: 0,
           zIndex: 1000,
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          backdropFilter: 'blur(20px)',
+          backgroundColor: 'transparent',
           transition: 'all 0.3s ease'
         }}
       >
@@ -99,7 +98,7 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
             alignItems: 'center',
             paddingTop: '0',
             paddingBottom: 'var(--spacing-md)',
-            paddingRight: '15rem',
+            paddingRight: 'var(--header-right-padding)',
             paddingLeft: '0',
             width: '100%'
           }}>
@@ -115,6 +114,7 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
                 }
                 setIsMenuOpen(false);
               }}
+              className="logo-link"
               style={{
                 fontSize: '0.75rem',
                 fontWeight: '700',
@@ -122,19 +122,22 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
                 textDecoration: 'none',
                 letterSpacing: '0.05em',
                 cursor: 'pointer',
-                paddingLeft: '1rem',
+                paddingLeft: 'var(--header-left-padding)',
                 marginLeft: '0',
-                marginTop: '0.50rem',
+                marginTop: 'var(--header-top-padding)',
               }}
             >
+              <span className="bracket logo-bracket">[</span>
               Justin Potter
+              <span className="bracket logo-bracket">]</span>
             </motion.a>
 
             {/* Navigation Links */}
             <div style={{
               display: 'flex',
               gap: 'var(--spacing-xl)',
-              alignItems: 'center'
+              alignItems: 'center',
+              flexWrap: 'wrap'
             }}>
               {navItems.map((item) => (
                 <motion.a
@@ -160,14 +163,20 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
                 >
                   <span 
                     className="bracket" 
-                    style={activeView === item.view ? { color: 'var(--lime-green)' } : {}}
+                    style={activeView === item.view ? { 
+                      color: 'var(--lime-green)',
+                      fontWeight: 500
+                    } : {}}
                   >
                     [
                   </span>
                   {item.name}
                   <span 
                     className="bracket" 
-                    style={activeView === item.view ? { color: 'var(--lime-green)' } : {}}
+                    style={activeView === item.view ? { 
+                      color: 'var(--lime-green)',
+                      fontWeight: 500
+                    } : {}}
                   >
                     ]
                   </span>

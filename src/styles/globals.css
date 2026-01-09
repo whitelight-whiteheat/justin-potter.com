@@ -20,6 +20,15 @@
   --spacing-lg: 3rem;
   --spacing-xl: 6rem;
   
+  /* Layout-specific spacing */
+  --hero-top-margin: 10rem;
+  --hero-left-margin: 1rem;
+  --hero-right-padding: 20rem;
+  --header-right-padding: 15rem;
+  --projects-section-padding: 5.3125rem; /* 85px */
+  --header-top-padding: 0.5rem;
+  --header-left-padding: 1rem;
+  
   --container-max-width: 1200px;
   --section-padding: 6rem 0;
 }
@@ -96,10 +105,12 @@ body {
   position: relative;
   background-color: var(--primary-black);
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   background-size: 40px 40px;
   background-position: 0 0;
+  /* Optimize rendering performance */
+  will-change: background-position;
 }
 
 /* Typography */
@@ -229,6 +240,17 @@ img {
   color: var(--lime-green) !important;
 }
 
+/* Logo brackets - hidden by default, shown on hover */
+.logo-bracket {
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.logo-link:hover .logo-bracket {
+  opacity: 1;
+  color: var(--lime-green) !important;
+}
+
 /* Utility Classes */
 .text-center {
   text-align: center;
@@ -254,6 +276,12 @@ img {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  :root {
+    --hero-right-padding: 10rem;
+    --header-right-padding: 8rem;
+    --projects-section-padding: 3rem;
+  }
+  
   .section {
     padding: 5rem 0;
   }
@@ -268,6 +296,14 @@ img {
 }
 
 @media (max-width: 768px) {
+  :root {
+    --hero-right-padding: 2rem;
+    --hero-top-margin: 6rem;
+    --header-right-padding: 2rem;
+    --projects-section-padding: 1.5rem;
+    --spacing-xl: 2rem; /* Reduce gap between nav items on mobile */
+  }
+  
   h1 {
     font-size: 2.5rem;
   }
@@ -307,6 +343,13 @@ img {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --hero-right-padding: 1rem;
+    --hero-top-margin: 4rem;
+    --header-right-padding: 1rem;
+    --projects-section-padding: 1rem;
+  }
+  
   h1 {
     font-size: 2rem;
   }
