@@ -12,6 +12,7 @@ import {
 } from '../utils/animations';
 import { getDisplayName, formatDisplayTime } from '../utils/helpers';
 import { useProjectHover, useDisplayTime } from '../utils/hooks';
+import Footer from '../components/Footer';
 
 interface MainContentProps {
   onProjectHover?: (project: ProjectData | null) => void;
@@ -20,11 +21,64 @@ interface MainContentProps {
 const MainContent = ({ onProjectHover }: MainContentProps) => {
   const [hoveredProject, setHoveredProject] = useState<ProjectData | null>(null);
   const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
+  const [showFooter, setShowFooter] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   
   // Use shared hooks for consistent behavior
   const animationKey = useProjectHover(hoveredProject);
   const currentTime = useDisplayTime(hoveredProject);
+
+  // Track scroll to show/hide footer
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    // Find the scrollable main element (motion.main from App.tsx)
+    const findScrollableMain = (): HTMLElement | null => {
+      // Try to find the main element that contains this section
+      const section = sectionRef.current;
+      if (!section) return null;
+      
+      let current: HTMLElement | null = section.parentElement;
+      while (current && current !== document.body) {
+        const style = window.getComputedStyle(current);
+        const tagName = current.tagName.toLowerCase();
+        // Look for main element with overflowY: auto
+        if (tagName === 'main' && (style.overflowY === 'auto' || style.overflowY === 'scroll')) {
+          return current;
+        }
+        current = current.parentElement;
+      }
+      return null;
+    };
+
+    const setupScrollListener = () => {
+      const scrollableMain = findScrollableMain();
+      if (!scrollableMain) return null;
+
+      const handleScroll = () => {
+        const scrollTop = scrollableMain.scrollTop || 0;
+        const threshold = 50;
+        setShowFooter(scrollTop > threshold);
+      };
+
+      // Check initial scroll position
+      handleScroll();
+
+      scrollableMain.addEventListener('scroll', handleScroll, { passive: true });
+      return () => scrollableMain.removeEventListener('scroll', handleScroll);
+    };
+
+    // Retry with delay to ensure DOM is ready
+    let cleanup: (() => void) | undefined = undefined;
+    const timeoutId = setTimeout(() => {
+      cleanup = setupScrollListener() || undefined;
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      cleanup?.();
+    };
+  }, []);
 
   const projects = [
     {
@@ -85,15 +139,17 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
 
   return (
     <motion.section 
+      ref={sectionRef}
       style={{
         width: '100%',
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
         position: 'relative',
         overflow: 'hidden',
-        padding: 'calc(var(--spacing-lg) + 50px) 0 var(--spacing-sm) 0',
+        paddingTop: 'calc(var(--spacing-lg) + 50px)',
+        paddingLeft: 0,
+        paddingRight: 0,
+        paddingBottom: 0,
         backgroundColor: 'transparent'
       }}
     >
@@ -101,10 +157,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
       <div
         style={{
           width: '100%',
-          height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
           margin: '0',
           position: 'relative',
           zIndex: 1
@@ -351,7 +405,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             flexDirection: 'column',
             justifyContent: 'flex-end',
             flexShrink: 0,
-            paddingTop: 'var(--spacing-md)',
+            paddingTop: 'var(--spacing-xl)',
             paddingBottom: 'var(--spacing-md)',
             paddingLeft: 'var(--projects-section-padding)',
             paddingRight: 'var(--projects-section-padding)',
@@ -401,12 +455,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
 
               document.addEventListener('mousemove', handleMouseMove);
               document.addEventListener('mouseup', handleMouseUp);
-            }}
-            onWheel={(e) => {
-              if (e.deltaY !== 0) {
-                e.preventDefault();
-                e.currentTarget.scrollLeft += e.deltaY;
-              }
             }}
           >
             <style>{`
@@ -584,6 +632,9 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
           </div>
         </div>
       </div>
+      
+      {/* Footer at bottom of content */}
+      <Footer showFooter={showFooter} />
     </motion.section>
   );
 };

@@ -18,14 +18,13 @@ const Footer = ({ showFooter = false }: FooterProps) => {
       }}
       transition={{ duration: DURATION.normal, ease: EASING }}
       style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
+        position: 'relative',
         backgroundColor: 'transparent',
-        padding: 'var(--spacing-sm) var(--spacing-md)',
-        zIndex: 100,
-        pointerEvents: showFooter ? 'auto' : 'none'
+        padding: 'var(--spacing-lg) var(--spacing-md)',
+        paddingBottom: 'var(--spacing-lg)',
+        marginTop: 'auto',
+        pointerEvents: showFooter ? 'auto' : 'none',
+        flexShrink: 0
       }}
     >
       <div style={{
