@@ -251,6 +251,22 @@ img {
   color: var(--lime-green) !important;
 }
 
+/* Nav brackets - hidden by default for non-active links, shown on hover */
+.nav-bracket {
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.nav-link:hover .nav-bracket {
+  opacity: 1;
+  color: var(--lime-green) !important;
+}
+
+/* Active nav links always show brackets */
+.nav-bracket-active {
+  opacity: 1 !important;
+}
+
 /* Utility Classes */
 .text-center {
   text-align: center;

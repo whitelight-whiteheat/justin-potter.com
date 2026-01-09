@@ -97,7 +97,7 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingTop: '0',
-            paddingBottom: 'var(--spacing-md)',
+            paddingBottom: 'var(--spacing-sm)',
             paddingRight: 'var(--header-right-padding)',
             paddingLeft: '0',
             width: '100%'
@@ -105,7 +105,6 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
             {/* Logo/Home Link */}
             <motion.a
               href="#"
-              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={(e) => {
                 e.preventDefault();
@@ -114,22 +113,24 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
                 }
                 setIsMenuOpen(false);
               }}
-              className="logo-link"
+              className="nav-link"
               style={{
-                fontSize: '0.75rem',
-                fontWeight: '700',
+                fontSize: '0.7rem',
+                fontWeight: '400',
                 color: 'var(--primary-white)',
                 textDecoration: 'none',
-                letterSpacing: '0.05em',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                fontFamily: 'var(--font-mono)',
                 cursor: 'pointer',
                 paddingLeft: 'var(--header-left-padding)',
                 marginLeft: '0',
                 marginTop: 'var(--header-top-padding)',
               }}
             >
-              <span className="bracket logo-bracket">[</span>
+              <span className="nav-bracket">[</span>
               Justin Potter
-              <span className="bracket logo-bracket">]</span>
+              <span className="nav-bracket">]</span>
             </motion.a>
 
             {/* Navigation Links */}
@@ -139,49 +140,52 @@ const Header = ({ onNavigate, activeView = 'main' }: HeaderProps) => {
               alignItems: 'center',
               flexWrap: 'wrap'
             }}>
-              {navItems.map((item) => (
-                <motion.a
-                  key={item.name}
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.view);
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bracket-hover"
-                  style={{
-                    fontSize: '0.875rem',
-                    fontWeight: '400',
-                    color: 'var(--primary-white)',
-                    textDecoration: 'none',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    fontFamily: 'var(--font-mono)',
-                    opacity: 1,
-                    cursor: 'pointer'
-                  }}
-                >
-                  <span 
-                    className="bracket" 
-                    style={activeView === item.view ? { 
-                      color: 'var(--lime-green)',
-                      fontWeight: 500
-                    } : {}}
+              {navItems.map((item) => {
+                const isActive = activeView === item.view;
+                return (
+                  <motion.a
+                    key={item.name}
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(item.view);
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`nav-link ${isActive ? 'nav-link-active' : ''}`}
+                    style={{
+                      fontSize: '0.7rem',
+                      fontWeight: '400',
+                      color: 'var(--primary-white)',
+                      textDecoration: 'none',
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      fontFamily: 'var(--font-mono)',
+                      opacity: 1,
+                      cursor: 'pointer'
+                    }}
                   >
-                    [
-                  </span>
-                  {item.name}
-                  <span 
-                    className="bracket" 
-                    style={activeView === item.view ? { 
-                      color: 'var(--lime-green)',
-                      fontWeight: 500
-                    } : {}}
-                  >
-                    ]
-                  </span>
-                </motion.a>
-              ))}
+                    <span 
+                      className={`nav-bracket ${isActive ? 'nav-bracket-active' : ''}`}
+                      style={isActive ? { 
+                        color: 'var(--lime-green)',
+                        fontWeight: 500
+                      } : {}}
+                    >
+                      [
+                    </span>
+                    {item.name}
+                    <span 
+                      className={`nav-bracket ${isActive ? 'nav-bracket-active' : ''}`}
+                      style={isActive ? { 
+                        color: 'var(--lime-green)',
+                        fontWeight: 500
+                      } : {}}
+                    >
+                      ]
+                    </span>
+                  </motion.a>
+                );
+              })}
             </div>
           </nav>
         </div>
