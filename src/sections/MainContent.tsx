@@ -6,7 +6,6 @@ import {
   containerVariants,
   hoverAnimationVariants,
   subtitleVariants,
-  projectCardHover,
   hoverTransition,
   DURATION,
   EASING,
@@ -118,7 +117,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             padding: `0 var(--hero-right-padding) 0 0`,
             margin: '0',
             flexShrink: 0,
-            position: 'relative'
+            position: 'relative',
+            marginTop: '-75px'
           }}
         >
           <motion.div
@@ -358,39 +358,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             boxSizing: 'border-box'
           }}
         >
-          {/* Featured Projects Label */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 'var(--spacing-md)',
-            paddingLeft: 'var(--spacing-md)',
-            paddingRight: 'var(--spacing-md)'
-          }}>
-            <h2 style={{
-              fontSize: '0.875rem',
-              fontWeight: 400,
-              color: 'var(--primary-white)',
-              fontFamily: 'var(--font-mono)',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              margin: 0
-            }}>
-              Featured Projects
-            </h2>
-            <p style={{
-              fontSize: '0.75rem',
-              fontWeight: 300,
-              color: 'var(--medium-grey)',
-              fontFamily: 'var(--font-mono)',
-              letterSpacing: '0.05em',
-              textTransform: 'lowercase',
-              margin: 0,
-              fontStyle: 'italic'
-            }}>
-              (Swipe)
-            </p>
-          </div>
 
           {/* Horizontal Scrollable Projects Container */}
           <div
@@ -451,13 +418,17 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             {/* Projects List */}
             <div style={{
               display: 'flex',
-              gap: 'var(--spacing-lg)',
+              gap: '1rem',
               minWidth: 'max-content',
-              alignItems: 'center',
+              alignItems: 'flex-end',
               justifyContent: 'center',
               margin: '0 auto'
             }}>
-              {projects.map((project, index) => (
+              {projects.map((project, index) => {
+                const isHovered = hoveredCardId === project.id;
+                const isAnyCardHovered = hoveredCardId !== null;
+                
+                return (
                 <motion.a
                   key={project.id}
                   href={project.liveUrl}
@@ -466,7 +437,6 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                   initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: DURATION.slow, delay: index * 0.1, ease: EASING }}
                   data-project-id={project.id}
                   className="bracket-hover"
                   onMouseEnter={(e) => {
@@ -478,9 +448,16 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     setHoveredCardId(null);
                     setHoveredProject(null);
                   }}
-                  whileHover={{ 
-                    scale: 1.02,
-                    transition: { duration: DURATION.fast, ease: EASING }
+                  animate={{
+                    filter: isAnyCardHovered && !isHovered ? 'blur(4px)' : 'blur(0px)',
+                    scale: isHovered ? 1.02 : 1
+                  }}
+                  transition={{
+                    opacity: { duration: DURATION.slow, delay: index * 0.1, ease: EASING },
+                    x: { duration: DURATION.slow, delay: index * 0.1, ease: EASING },
+                    filter: { duration: DURATION.fast, ease: EASING },
+                    scale: { duration: DURATION.fast, ease: EASING },
+                    default: { duration: DURATION.slow, delay: index * 0.1, ease: EASING }
                   }}
                   style={{
                     minWidth: '320px',
@@ -493,15 +470,21 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     position: 'relative',
                     pointerEvents: 'auto',
                     cursor: 'pointer',
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    alignSelf: 'flex-end'
                   }}
                 >
                   {/* Project Image */}
                   <motion.div
                     whileHover={{ 
-                      scale: 1.05,
+                      scale: isHovered ? 1.05 : 1,
                       transition: { duration: DURATION.fast, ease: EASING }
                     }}
+                    animate={{
+                      scaleY: isAnyCardHovered && !isHovered ? 0.85 : 1,
+                      originY: 1
+                    }}
+                    transition={{ duration: DURATION.fast, ease: EASING }}
                     onMouseEnter={(e) => e.stopPropagation()}
                     style={{
                       width: '100%',
@@ -512,7 +495,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                       flexShrink: 0,
                       zIndex: 1,
                       pointerEvents: 'auto',
-                      borderRadius: '2px'
+                      borderRadius: '2px',
+                      transformOrigin: 'bottom'
                     }}
                   >
                     <motion.img
@@ -594,7 +578,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                     </motion.span>
                   </div>
                 </motion.a>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
