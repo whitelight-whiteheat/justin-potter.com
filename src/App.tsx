@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './styles/globals.css';
 import Header from './components/Header';
@@ -23,6 +23,62 @@ const mainContainerStyle: React.CSSProperties = {
 function App() {
   const [activeView, setActiveView] = useState<'main' | 'about' | 'contact' | 'archive'>('main');
   const [hoveredProject, setHoveredProject] = useState<ProjectData | null>(null);
+  const mainRef = useRef<HTMLElement | null>(null);
+
+
+  // Slow down scroll speed for smoother, slower scrolling
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      const mainElement = document.querySelector('main');
+      // Only intercept vertical scrolling, allow horizontal scrolling for project cards
+      if (mainElement && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const target = e.target as HTMLElement;
+        // Check if we're in a horizontally scrollable container (project cards)
+        const horizontalScrollContainer = target.closest('[style*="overflow-x"]');
+        if (horizontalScrollContainer && horizontalScrollContainer.scrollWidth > horizontalScrollContainer.clientWidth) {
+          // Allow horizontal scrolling to work normally
+          return;
+        }
+        
+        if (mainElement.contains(target)) {
+          const scrollHeight = mainElement.scrollHeight;
+          const clientHeight = mainElement.clientHeight;
+          const canScroll = scrollHeight > clientHeight;
+          if (!canScroll) {
+            return; // Don't prevent default if can't scroll
+          }
+          e.preventDefault();
+          const maxScroll = scrollHeight - clientHeight;
+          const currentScroll = mainElement.scrollTop;
+          const remainingScroll = maxScroll - currentScroll;
+          
+          // If scrolling down and one notch should reach bottom
+          if (e.deltaY > 0 && remainingScroll > 0) {
+            // One mini notch should take us to bottom - slower scroll speed
+            const scrollSpeed = Math.max((remainingScroll / Math.abs(e.deltaY)) * 0.8, 0.6);
+            const scrollAmount = e.deltaY * scrollSpeed;
+            // Ensure we don't overshoot
+            const finalScroll = Math.min(scrollAmount, remainingScroll);
+            mainElement.scrollBy({
+              top: finalScroll,
+              behavior: 'smooth'
+            });
+          } else {
+            // Scrolling up - use slower behavior
+            const scrollSpeed = 1.2;
+            const scrollAmount = e.deltaY * scrollSpeed;
+            mainElement.scrollBy({
+              top: scrollAmount,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [activeView]);
 
   return (
     <div className="App" id="top" style={{

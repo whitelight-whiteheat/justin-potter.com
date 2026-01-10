@@ -8,7 +8,6 @@ interface FooterProps {
 
 const Footer = ({ showFooter = false }: FooterProps) => {
   const currentYear = new Date().getFullYear();
-
   return (
     <motion.footer
       initial={{ opacity: 0, y: 20 }}
@@ -20,11 +19,17 @@ const Footer = ({ showFooter = false }: FooterProps) => {
       style={{
         position: 'relative',
         backgroundColor: 'transparent',
-        padding: 'var(--spacing-lg) var(--spacing-md)',
-        paddingBottom: 'var(--spacing-lg)',
-        marginTop: 'auto',
+        padding: '0.5rem var(--spacing-md)',
+        paddingBottom: '1rem',
+        marginTop: '20px',
         pointerEvents: showFooter ? 'auto' : 'none',
-        flexShrink: 0
+        flexShrink: 0,
+        visibility: showFooter ? 'visible' : 'hidden',
+        height: showFooter ? 'auto' : '76px',
+        overflow: 'hidden'
+      }}
+      onAnimationComplete={() => {
+        // Animation complete
       }}
     >
       <div style={{
@@ -33,6 +38,7 @@ const Footer = ({ showFooter = false }: FooterProps) => {
         alignItems: 'center',
         maxWidth: '100%',
         padding: '0 var(--projects-section-padding)',
+        paddingBottom: '0',
         flexWrap: 'wrap',
         gap: 'var(--spacing-sm)'
       }}>

@@ -24,6 +24,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
   const [showFooter, setShowFooter] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   // Use shared hooks for consistent behavior
   const animationKey = useProjectHover(hoveredProject);
@@ -57,11 +58,20 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
 
       const handleScroll = () => {
         const scrollTop = scrollableMain.scrollTop || 0;
-        const threshold = 50;
-        setShowFooter(scrollTop > threshold);
+        const scrollHeight = scrollableMain.scrollHeight || 0;
+        const clientHeight = scrollableMain.clientHeight || 0;
+        const maxScroll = scrollHeight - clientHeight;
+        // Show footer when scrolled at least 20px OR when near bottom (within 30px of max scroll, but only if maxScroll is significant)
+        const threshold = 20;
+        const nearBottomThreshold = 30;
+        // Only check near bottom if there's enough scrollable content and we're actually near the bottom
+        const nearBottom = maxScroll > nearBottomThreshold && scrollTop >= maxScroll - nearBottomThreshold;
+        const pastThreshold = scrollTop >= threshold;
+        const shouldShow = pastThreshold || nearBottom;
+        setShowFooter(shouldShow);
       };
 
-      // Check initial scroll position
+      // Check initial scroll position - should be 0, so footer should be hidden
       handleScroll();
 
       scrollableMain.addEventListener('scroll', handleScroll, { passive: true });
@@ -77,6 +87,15 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
     return () => {
       clearTimeout(timeoutId);
       cleanup?.();
+    };
+  }, []);
+
+  // Cleanup hover timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -105,6 +124,13 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
     {
       id: 4,
       title: 'API Dashboard',
+      imageUrl: project1Image, // Placeholder - replace with actual project image
+      liveUrl: '#',
+      year: 2024
+    },
+    {
+      id: 5,
+      title: 'New Project',
       imageUrl: project1Image, // Placeholder - replace with actual project image
       liveUrl: '#',
       year: 2024
@@ -145,11 +171,12 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'visible',
+        minHeight: 'calc(100vh + 20px)',
         paddingTop: 'calc(var(--spacing-lg) + 50px)',
         paddingLeft: 0,
         paddingRight: 0,
-        paddingBottom: 0,
+        paddingBottom: '20px',
         backgroundColor: 'transparent'
       }}
     >
@@ -161,7 +188,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
           flexDirection: 'column',
           margin: '0',
           position: 'relative',
-          zIndex: 1
+          zIndex: 1,
+          flex: 'none'
         }}
       >
         {/* Hero Section - Independent Container */}
@@ -405,10 +433,10 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
             flexDirection: 'column',
             justifyContent: 'flex-end',
             flexShrink: 0,
-            paddingTop: 'var(--spacing-xl)',
-            paddingBottom: 'var(--spacing-md)',
-            paddingLeft: 'var(--projects-section-padding)',
-            paddingRight: 'var(--projects-section-padding)',
+            paddingTop: 'calc(var(--spacing-xl) + 4rem)',
+            paddingBottom: 'var(--spacing-sm)',
+            paddingLeft: 0,
+            paddingRight: 0,
             boxSizing: 'border-box'
           }}
         >
@@ -426,8 +454,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               cursor: 'grab',
-              paddingLeft: 'var(--spacing-md)',
-              paddingRight: 'var(--spacing-md)',
+              paddingLeft: 'var(--header-left-padding)',
+              paddingRight: '1rem',
               paddingBottom: '0',
               justifyContent: 'flex-start',
               alignItems: 'flex-end',
@@ -488,13 +516,27 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                   data-project-id={project.id}
                   className="bracket-hover"
                   onMouseEnter={(e) => {
+                    // Clear any pending timeout to prevent clearing hover state
+                    if (hoverTimeoutRef.current) {
+                      clearTimeout(hoverTimeoutRef.current);
+                      hoverTimeoutRef.current = null;
+                    }
                     setHoveredCardId(project.id);
-                    const projectData = { title: project.title, year: project.year };
+                    // For projects 2-5, show "COMING SOON" and year 2026
+                    const isComingSoon = project.id >= 2 && project.id <= 5;
+                    const projectData = { 
+                      title: isComingSoon ? 'COMING SOON' : project.title, 
+                      year: isComingSoon ? 2026 : project.year 
+                    };
                     setHoveredProject(projectData);
                   }}
                   onMouseLeave={(e) => {
-                    setHoveredCardId(null);
-                    setHoveredProject(null);
+                    // Add a small delay before clearing to allow smooth transition between cards
+                    hoverTimeoutRef.current = setTimeout(() => {
+                      setHoveredCardId(null);
+                      setHoveredProject(null);
+                      hoverTimeoutRef.current = null;
+                    }, 50);
                   }}
                   animate={{
                     filter: isAnyCardHovered && !isHovered ? 'blur(4px)' : 'blur(0px)',
@@ -544,40 +586,61 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                       zIndex: 1,
                       pointerEvents: 'auto',
                       borderRadius: '2px',
-                      transformOrigin: 'bottom'
+                      transformOrigin: 'bottom',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
                     }}
                   >
-                    <motion.img
-                      src={project.imageUrl}
-                      alt={project.title}
-                      whileHover={{
-                        filter: 'brightness(1.1)',
-                        transition: { duration: DURATION.fast, ease: EASING }
-                      }}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transition: 'filter 0.3s ease'
-                      }}
-                    />
-                    {/* Overlay on hover */}
-                    {hoveredCardId === project.id && (
+                    {project.id >= 2 && project.id <= 5 ? (
                       <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: DURATION.fast }}
                         style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.1) 100%)',
-                          pointerEvents: 'none'
+                          fontSize: '1.5rem',
+                          fontWeight: 400,
+                          color: 'var(--medium-grey)',
+                          fontFamily: 'var(--font-mono)',
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          textAlign: 'center'
                         }}
-                      />
+                      >
+                        COMING SOON
+                      </motion.div>
+                    ) : (
+                      <>
+                        <motion.img
+                          src={project.imageUrl}
+                          alt={project.title}
+                          whileHover={{
+                            filter: 'brightness(1.1)',
+                            transition: { duration: DURATION.fast, ease: EASING }
+                          }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            transition: 'filter 0.3s ease'
+                          }}
+                        />
+                        {/* Overlay on hover */}
+                        {hoveredCardId === project.id && (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: DURATION.fast }}
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              background: 'linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.1) 100%)',
+                              pointerEvents: 'none'
+                            }}
+                          />
+                        )}
+                      </>
                     )}
                   </motion.div>
 
