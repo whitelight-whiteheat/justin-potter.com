@@ -33,14 +33,13 @@ const Footer = ({ showFooter = false }: FooterProps) => {
       }}
     >
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        maxWidth: '100%',
-        padding: '0 var(--projects-section-padding)',
+        position: 'relative',
+        width: '100%',
+        padding: '0 0.5rem',
         paddingBottom: '0',
-        flexWrap: 'wrap',
-        gap: 'var(--spacing-sm)'
+        display: 'flex',
+        alignItems: 'center',
+        minHeight: '1.5rem'
       }}>
         <div style={{
           display: 'flex',
@@ -87,6 +86,8 @@ const Footer = ({ showFooter = false }: FooterProps) => {
           </a>
         </div>
         <p style={{
+          position: 'absolute',
+          left: 'calc(0.5rem + 320px * 3 + 1rem * 3)',
           color: 'var(--medium-grey)',
           fontSize: '0.75rem',
           margin: 0,

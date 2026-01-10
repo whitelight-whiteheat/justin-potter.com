@@ -235,7 +235,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               variants={hoverAnimationVariants}
               style={{
                 fontSize: 'clamp(3.5rem, 12vw, 9.5rem)',
-                fontWeight: 700,
+                fontWeight: 450,
                 lineHeight: 0.85,
                 letterSpacing: '-0.03em',
                 color: 'var(--primary-white)',
@@ -253,18 +253,18 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
                 initial="initial"
                 animate={hoveredProject ? "animate" : "initial"}
                 variants={hoverAnimationVariants}
-                style={{
-                  fontSize: 'clamp(3.5rem, 12vw, 9.5rem)',
-                  fontWeight: 700,
-                  lineHeight: 0.85,
-                  letterSpacing: '-0.03em',
-                  color: 'var(--primary-white)',
-                  margin: 0,
-                  fontFamily: 'var(--font-primary)',
-                  textTransform: 'uppercase',
-                  position: 'relative'
-                }}
-              >
+              style={{
+                fontSize: 'clamp(3.5rem, 12vw, 9.5rem)',
+                fontWeight: 450,
+                lineHeight: 0.85,
+                letterSpacing: '-0.03em',
+                color: 'var(--primary-white)',
+                margin: 0,
+                fontFamily: 'var(--font-primary)',
+                textTransform: 'uppercase',
+                position: 'relative'
+              }}
+            >
                 {nameParts[1]}
               </motion.h1>
             )}
@@ -284,7 +284,7 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               gap: 0,
               textAlign: 'left',
               minWidth: '6rem',
-              position: 'relative',
+              position: 'absolute',
               minHeight: '2.4rem'
             }}
           >
@@ -454,8 +454,8 @@ const MainContent = ({ onProjectHover }: MainContentProps) => {
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               cursor: 'grab',
-              paddingLeft: 'var(--header-left-padding)',
-              paddingRight: '1rem',
+              paddingLeft: '0.5rem',
+              paddingRight: '0.5rem',
               paddingBottom: '0',
               justifyContent: 'flex-start',
               alignItems: 'flex-end',
